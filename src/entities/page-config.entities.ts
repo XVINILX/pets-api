@@ -2,33 +2,49 @@ import {
   Column,
   CreateDateColumn,
   Entity,
-  OneToMany,
+  JoinColumn,
   OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
+
 import { EnterpriseEntity } from './enterprise.entities';
-import { AnimalsEntity } from './animals.entities';
 
 @Entity()
-export class UserEntity {
+export class PageConfigEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column({ unique: true })
-  email: string;
+  @Column()
+  whatsApp: string;
 
   @Column()
-  password: string;
+  instagram: string;
+
+  @Column()
+  facebook: string;
+
+  @Column()
+  donationLink: string;
+
+  @Column()
+  backgroundImage: string;
+
+  @Column()
+  aboutMe: string;
+
+  @Column()
+  avatarImage: string;
+
+  @Column()
+  colorInfo: string;
 
   @OneToOne(
     () => EnterpriseEntity,
-    (enterprise: EnterpriseEntity) => enterprise.user,
+    (enterprise: EnterpriseEntity) => enterprise.pageConfig,
   )
+  @JoinColumn()
   public enterprise: EnterpriseEntity;
-
-  @OneToMany(() => AnimalsEntity, (animal: AnimalsEntity) => animal.receiver)
-  public donations: AnimalsEntity[];
 
   @CreateDateColumn()
   createdAt: Date;
