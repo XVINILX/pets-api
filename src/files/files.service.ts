@@ -1,44 +1,33 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateEnterpriseDto } from './domain/dtos/create-enterprise.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 
-import { UpdateEnterpriseDto } from './domain/dtos/update-enterprise.dto';
-
-import { PageConfigEntity } from 'src/entities/page-config.entity';
+import { FileEntity } from 'src/entities/file.entity';
+import { CreateFileDto } from './domain/dtos/create-file.dto';
+import { UpdateFileDto } from './domain/dtos/update-file.dto';
 
 @Injectable()
-export class PageConfigService {
+export class FilesService {
   constructor(
-    @InjectRepository(PageConfigEntity)
-    private animalRepository: Repository<PageConfigEntity>,
+    @InjectRepository(FileEntity)
+    private fileRepository: Repository<FileEntity>,
   ) {}
 
-  async createEnterprise(
-    createEnterpriseDto: CreateEnterpriseDto,
-  ): Promise<PageConfigEntity> {
+  async createFile(createFileDto: CreateFileDto): Promise<FileEntity> {
     try {
-      // const hero = this.animalRepository.create(createEnterpriseDto);
+      const hero = this.fileRepository.create(createFileDto);
 
-      // return this.animalRepository.save(hero);
-
-      return;
+      return this.fileRepository.save(hero);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
-  async patchEnterprise(
-    patchEnterprise: UpdateEnterpriseDto,
-    id: string,
-  ): Promise<PageConfigEntity> {
+  async patchFile(patchFile: UpdateFileDto, id: string): Promise<FileEntity> {
     try {
-      // const enterprise = await this.animalRepository.update(
-      //   id,
-      //   patchEnterprise,
-      // );
+      const file = await this.fileRepository.update(id, patchFile);
 
-      return await this.animalRepository.findOneByOrFail({ id: id });
+      return await this.fileRepository.findOneByOrFail({ id: id });
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
@@ -51,8 +40,8 @@ export class PageConfigService {
 
   async listEnterprise(search: string, items?: number, page?: number) {
     try {
-      const enterpriseList = await this.animalRepository.findAndCountBy({
-        backgroundImage: ILike(`%${search}%`),
+      const enterpriseList = await this.fileRepository.findAndCountBy({
+        description: ILike(`%${search}%`),
       });
 
       if (items && page) {
@@ -75,7 +64,7 @@ export class PageConfigService {
 
   async findEnterprise(id: string) {
     try {
-      const enterprise = await this.animalRepository.findOne({
+      const enterprise = await this.fileRepository.findOne({
         where: { id },
       });
 
@@ -87,8 +76,8 @@ export class PageConfigService {
 
   async deleteUser(id: string): Promise<boolean> {
     try {
-      const enterprise = await this.animalRepository.delete({ id: id });
-      const checkEnterprise = await this.animalRepository.exist({
+      const enterprise = await this.fileRepository.delete({ id: id });
+      const checkEnterprise = await this.fileRepository.exist({
         where: { id: id },
       });
       return !checkEnterprise;

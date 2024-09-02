@@ -4,7 +4,7 @@ import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 
 import { UpdateEnterpriseDto } from './domain/dtos/update-enterprise.dto';
-import { AnimalsEntity } from 'src/entities/animals.entities';
+import { AnimalsEntity } from 'src/entities/animals.entity';
 
 @Injectable()
 export class AnimalsService {

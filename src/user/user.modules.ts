@@ -12,7 +12,7 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { UserEntity } from 'src/entities/user.entities';
+import { UserEntity } from 'src/entities/user.entity';
 import { DeleteUserHandler } from './domain/command/delete-user.handler';
 import { PatchUserHandler } from './domain/command/patch-user.handler';
 import { GetUserByIdHandler } from './domain/query/find-by-id-user.handler';

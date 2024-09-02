@@ -7,8 +7,8 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { EnterpriseEntity } from './enterprise.entities';
-import { AnimalsEntity } from './animals.entities';
+import { EnterpriseEntity } from './enterprise.entity';
+import { AnimalsEntity } from './animals.entity';
 
 @Entity()
 export class UserEntity {

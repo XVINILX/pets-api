@@ -8,7 +8,7 @@ import {
   UpdateDateColumn,
 } from 'typeorm';
 
-import { EnterpriseEntity } from './enterprise.entities';
+import { EnterpriseEntity } from './enterprise.entity';
 
 @Entity()
 export class PageConfigEntity {

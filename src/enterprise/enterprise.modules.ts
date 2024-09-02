@@ -10,7 +10,7 @@ import { EnterpriseController } from './controller/enterprise.controller';
 import { CreateEnterpriseHandler } from './domain/command/create-enteprise.handler';
 import { EnterpriseService } from './enterprise.service';
 import { TypeOrmModule } from '@nestjs/typeorm';
-import { EnterpriseEntity } from 'src/entities/enterprise.entities';
+import { EnterpriseEntity } from 'src/entities/enterprise.entity';
 import { CqrsModule } from '@nestjs/cqrs';
 import { PatchEnterpriseHandler } from './domain/command/patch-enteprise.handler';
 import { DeleteEnterpriseHandler } from './domain/command/delete-enteprise.handler';

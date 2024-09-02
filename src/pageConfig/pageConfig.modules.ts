@@ -18,7 +18,7 @@ import { ListEnterpriseHandler } from './domain/query/list-enterprise.handler';
 import { PaginationEnterpriseHandler } from './domain/query/pagination-enterprise.handler';
 import { AuthModule } from 'src/core/auth/auth.module';
 import { PageConfigService } from './pageConfig.service';
-import { PageConfigEntity } from 'src/entities/page-config.entities';
+import { PageConfigEntity } from 'src/entities/page-config.entity';
 
 const CommandHandler = [
   CreateEnterpriseHandler,

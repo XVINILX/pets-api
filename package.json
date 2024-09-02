@@ -20,10 +20,10 @@
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
     "test:e2e": "jest --config ./test/jest-e2e.json",
-    "typeorm:generate": "yarn build && yarn typeorm -d ./dist/typeOrm.config.js migration:generate ./type-orm/migrations/new-entity",
-    "typeorm:create": "yarn build && yarn typeorm migration:create ./type-orm/migrations/new-entity",
-    "migration": "yarn build && yarn typeorm -d ./dist/typeOrm.config.js migration:run",
-    "migration:revert": "yarn build yarn typeorm -d dist/typeOrm.config.js migration:revert NewEntity17009458846"
+    "typeorm": "yarn build && npx typeorm -d dist/src/db/ormconfig.js",
+    "migration:generate": "yarn typeorm -- migration:generate",
+    "migration:run": "yarn typeorm -- migration:run",
+    "migration:revert": "yarn typeorm -- migration:revert"
   },
   "dependencies": {
     "@nestjs/common": "^10.0.0",
@@ -34,6 +34,7 @@
     "@nestjs/swagger": "^7.1.16",
     "@nestjs/typeorm": "^10.0.1",
     "@types/bcrypt": "^5.0.2",
+    "aws-sdk": "^2.1687.0",
     "bcrypt": "^5.1.1",
     "class-transformer": "^0.5.1",
     "dotenv": "^16.3.1",

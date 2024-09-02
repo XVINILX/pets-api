@@ -2,12 +2,16 @@ import {
   Column,
   CreateDateColumn,
   Entity,
+  JoinColumn,
   ManyToOne,
+  OneToMany,
+  OneToOne,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { EnterpriseEntity } from './enterprise.entities';
-import { UserEntity } from './user.entities';
+import { EnterpriseEntity } from './enterprise.entity';
+import { UserEntity } from './user.entity';
+import { FileEntity } from './file.entity';
 
 @Entity()
 export class AnimalsEntity {
@@ -22,6 +26,9 @@ export class AnimalsEntity {
 
   @Column()
   public race: string;
+
+  @Column()
+  public slug: string;
 
   @Column()
   public city: string;
@@ -58,6 +65,14 @@ export class AnimalsEntity {
 
   @Column()
   public adoptedAt: Date;
+
+  @OneToOne(() => FileEntity, (image: FileEntity) => image.animalPrincipalImage)
+  @JoinColumn()
+  public principalPicture: FileEntity;
+
+  @OneToMany(() => FileEntity, (image: FileEntity) => image.animalImageList)
+  @JoinColumn()
+  public imagesList: FileEntity[];
 
   @Column()
   public birthday: Date;

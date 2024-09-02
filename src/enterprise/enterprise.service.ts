@@ -2,7 +2,7 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import { CreateEnterpriseDto } from './domain/dtos/create-enterprise.dto';
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
-import { EnterpriseEntity } from 'src/entities/enterprise.entities';
+import { EnterpriseEntity } from 'src/entities/enterprise.entity';
 import { UpdateEnterpriseDto } from './domain/dtos/update-enterprise.dto';
 
 @Injectable()

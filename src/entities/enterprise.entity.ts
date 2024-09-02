@@ -8,9 +8,9 @@ import {
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from 'typeorm';
-import { AnimalsEntity } from './animals.entities';
-import { UserEntity } from './user.entities';
-import { PageConfigEntity } from './page-config.entities';
+import { AnimalsEntity } from './animals.entity';
+import { UserEntity } from './user.entity';
+import { PageConfigEntity } from './page-config.entity';
 
 @Entity()
 export class EnterpriseEntity {

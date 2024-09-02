@@ -9,6 +9,7 @@ import { ConfigModule } from '@nestjs/config';
 import { DataSource } from 'typeorm';
 import { AnimalsModule } from './animals/animals.modules';
 import { PageConfigModule } from './pageConfig/pageConfig.modules';
+import { FilesModule } from './files/files.modules';
 
 @Module({
   imports: [
@@ -17,7 +18,7 @@ import { PageConfigModule } from './pageConfig/pageConfig.modules';
     AnimalsModule,
     EnterpriseModule,
     PageConfigModule,
-    ConfigModule.forRoot(),
+    ConfigModule.forRoot({ isGlobal: true }),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.PG_HOST,
@@ -28,6 +29,7 @@ import { PageConfigModule } from './pageConfig/pageConfig.modules';
       autoLoadEntities: true,
       synchronize: true,
     }),
+    FilesModule,
     UserModule,
   ],
 
