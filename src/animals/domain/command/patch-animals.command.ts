@@ -1,8 +1,8 @@
-import { UpdateEnterpriseDto } from '../dtos/update-enterprise.dto';
+import { UpdateAnimalDto } from '../dtos/update-animals.dto';
 
-export class PatchEnterpriseCommand {
+export class PatchAnimalCommand {
   constructor(
-    public readonly patchEnterpriseDto: UpdateEnterpriseDto,
+    public readonly patchAnimalDto: UpdateAnimalDto,
     public readonly id: string,
   ) {}
 }

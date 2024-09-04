@@ -1,21 +1,19 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { HttpException, HttpStatus } from '@nestjs/common';
-
-import { ListEnterpriseQuery } from './list-enterprise.query';
-
+import { GetAnimalByIdCommand } from './find-by-id-animals.query';
 import { AnimalsService } from 'src/animals/animals.service';
 
-@QueryHandler(ListEnterpriseQuery)
-export class ListEnterpriseHandler
-  implements IQueryHandler<ListEnterpriseQuery>
+@QueryHandler(GetAnimalByIdCommand)
+export class GetAnimalByIdHandler
+  implements IQueryHandler<GetAnimalByIdCommand>
 {
   constructor(private repository: AnimalsService) {}
 
-  async execute(command: ListEnterpriseQuery) {
+  async execute(command: GetAnimalByIdCommand) {
     try {
-      const { search } = command;
+      const { id } = command;
 
-      const enteprise = await this.repository.listEnterprise(search);
+      const enteprise = await this.repository.findEnterprise(id);
 
       return enteprise;
     } catch (error) {

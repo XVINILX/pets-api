@@ -2,20 +2,20 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { PatchEnterpriseCommand } from './patch-animals.command';
+import { PatchAnimalCommand } from './patch-animals.command';
 import { AnimalsService } from 'src/animals/animals.service';
 
-@CommandHandler(PatchEnterpriseCommand)
+@CommandHandler(PatchAnimalCommand)
 export class PatchEnterpriseHandler
-  implements ICommandHandler<PatchEnterpriseCommand>
+  implements ICommandHandler<PatchAnimalCommand>
 {
   constructor(private repository: AnimalsService) {}
 
-  async execute(command: PatchEnterpriseCommand) {
+  async execute(command: PatchAnimalCommand) {
     try {
-      const { patchEnterpriseDto, id } = command;
+      const { patchAnimalDto, id } = command;
       const enteprise = await this.repository.patchEnterprise(
-        patchEnterpriseDto,
+        patchAnimalDto,
         id,
       );
 

@@ -7,30 +7,29 @@ import {
 
 import { UserIdCheckMiddleware } from 'src/core/middleware/user-id-check.middleware';
 import { EnterpriseController } from './controller/animals.controller';
-import { CreateEnterpriseHandler } from './domain/command/create-animals.handler';
+import { CreateAnimalsHandler } from './domain/command/create-animals.handler';
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CqrsModule } from '@nestjs/cqrs';
 import { PatchEnterpriseHandler } from './domain/command/patch-animals.handler';
 import { DeleteEnterpriseHandler } from './domain/command/delete-animals.handler';
-import { GetEnterpriseByIdHandler } from './domain/query/find-by-id-enterprise.handler';
-import { ListEnterpriseHandler } from './domain/query/list-enterprise.handler';
-import { PaginationEnterpriseHandler } from './domain/query/pagination-enterprise.handler';
+import { GetAnimalByIdHandler } from './domain/query/find-by-id-animals.handler';
+import { ListAnimalsHandler } from './domain/query/list-animals.handler';
+import { PaginationAnimalsHandler } from './domain/query/pagination-animals.handler';
 import { AuthModule } from 'src/core/auth/auth.module';
 import { AnimalsEntity } from 'src/entities/animals.entity';
 import { AnimalsService } from './animals.service';
 
 const CommandHandler = [
-  CreateEnterpriseHandler,
+  CreateAnimalsHandler,
   DeleteEnterpriseHandler,
   PatchEnterpriseHandler,
-  ListEnterpriseHandler,
 ];
 
 const QueryHandler = [
-  GetEnterpriseByIdHandler,
-  ListEnterpriseHandler,
-  PaginationEnterpriseHandler,
+  GetAnimalByIdHandler,
+  ListAnimalsHandler,
+  PaginationAnimalsHandler,
 ];
 
 @Module({

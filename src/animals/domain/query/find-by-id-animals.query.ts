@@ -1,6 +1,6 @@
 /**
  * @param search string - Search by enterprise name
  */
-export class GetEnterpriseByIdQuery {
+export class GetAnimalByIdCommand {
   constructor(public readonly id: string) {}
 }

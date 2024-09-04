@@ -1,5 +1,5 @@
-import { CreateEnterpriseDto } from '../dtos/create-enterprise.dto';
+import { CreateAnimalDto } from '../dtos/create-animals.dto';
 
-export class CreateEnterpriseCommand {
-  constructor(public readonly createEnterpriseDto: CreateEnterpriseDto) {}
+export class CreateAnimalsCommand {
+  constructor(public readonly createAnimalsDto: CreateAnimalDto) {}
 }

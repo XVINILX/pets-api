@@ -11,21 +11,22 @@ import {
 import { ControllerApp } from 'src/core/decorators/controller-apitag.decorators';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateEnterpriseDto } from '../domain/dtos/create-enterprise.dto';
-import { CreateEnterpriseCommand } from '../domain/command/create-animals.command';
-import { UpdateEnterpriseDto } from '../domain/dtos/update-enterprise.dto';
-import { PatchEnterpriseCommand } from '../domain/command/patch-animals.command';
-import { DeleteEnterpriseCommand } from '../domain/command/delete-animals.command';
-import { ReadEnterpriseDto } from '../domain/dtos/read-enterprise.dto';
-import { DeleteEnterpriseDto } from '../domain/dtos/delete-enterprise.dto';
-import { GetEnterpriseByIdQuery } from '../domain/query/find-by-id-enterprise.query';
-import { ListEnterpriseDto } from '../domain/dtos/list-enterprise.dto';
-import { PaginationEnterpriseQuery } from '../domain/query/pagination-enterprise.query';
-import { AuthGuard } from 'src/core/guards/auth.guards';
 
-@UseGuards(AuthGuard)
-@ApiBearerAuth('jwt')
-@ControllerApp('enterprise', 'Enterprise')
+import { GetAnimalByIdCommand } from '../domain/query/find-by-id-animals.query';
+
+import { AuthGuard } from 'src/core/guards/auth.guards';
+import { ReadAnimalDto } from '../domain/dtos/read-animals.dto';
+import { UpdateAnimalDto } from '../domain/dtos/update-animals.dto';
+import { ListAnimalsDto } from '../domain/dtos/list-animals.dto';
+import { CreateAnimalDto } from '../domain/dtos/create-animals.dto';
+import { CreateAnimalsCommand } from '../domain/command/create-animals.command';
+import { PaginationAnimalsQuery } from '../domain/query/pagination-animals.query';
+import { PatchAnimalCommand } from '../domain/command/patch-animals.command';
+import { DeleteAnimalsCommand } from '../domain/command/delete-animals.command';
+
+// @UseGuards(AuthGuard)
+// @ApiBearerAuth('jwt')
+@ControllerApp('animals', 'Animals')
 export class EnterpriseController {
   constructor(
     private readonly commandBus: CommandBus,
@@ -34,28 +35,28 @@ export class EnterpriseController {
 
   @Post()
   @ApiResponse({
-    description: 'Creates an Enterprise',
-    type: ReadEnterpriseDto,
+    description: 'Creates an Animal',
+    type: ReadAnimalDto,
   })
-  async create(@Body() enterpriseDto: CreateEnterpriseDto) {
+  async create(@Body() enterpriseDto: CreateAnimalDto) {
     return await this.commandBus.execute(
-      new CreateEnterpriseCommand(enterpriseDto),
+      new CreateAnimalsCommand(enterpriseDto),
     );
   }
 
   @Get('/id=:id')
   @ApiResponse({
     description: 'Searchs an Enterprise By Id',
-    type: ReadEnterpriseDto,
+    type: ReadAnimalDto,
   })
   async findById(@Param('id') id: string) {
-    return this.queryBus.execute(new GetEnterpriseByIdQuery(id));
+    return this.queryBus.execute(new GetAnimalByIdCommand(id));
   }
 
   @Get('items=:items/page=:page/search=:search')
   @ApiResponse({
     description: 'Searchs an Enterprise By Id',
-    type: ListEnterpriseDto,
+    type: ListAnimalsDto,
   })
   async ListWithPagination(
     @Param('search') search: string,
@@ -63,30 +64,30 @@ export class EnterpriseController {
     @Param('items') items: number,
   ) {
     return this.queryBus.execute(
-      new PaginationEnterpriseQuery(search, page, items),
+      new PaginationAnimalsQuery(search, page, items),
     );
   }
 
   @Patch(':id/')
   @ApiResponse({
     description: 'Update an Enterprise',
-    type: ReadEnterpriseDto,
+    type: ReadAnimalDto,
   })
   async updateByCompleted(
-    @Body() patchEnterprise: UpdateEnterpriseDto,
+    @Body() patchEnterprise: UpdateAnimalDto,
     @Param('id') id: string,
   ) {
-    return this.commandBus.execute(
-      new PatchEnterpriseCommand(patchEnterprise, id),
+    return await this.commandBus.execute(
+      new PatchAnimalCommand(patchEnterprise, id),
     );
   }
 
   @ApiResponse({
     description: 'Delete an Enterprise',
-    type: DeleteEnterpriseDto,
+    type: ReadAnimalDto,
   })
   @Delete(':id')
   async delete(@Param('id') id: string) {
-    return this.commandBus.execute(new DeleteEnterpriseCommand(id));
+    return await this.commandBus.execute(new DeleteAnimalsCommand(id));
   }
 }

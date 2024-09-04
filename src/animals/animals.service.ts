@@ -1,10 +1,11 @@
 import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
-import { CreateEnterpriseDto } from './domain/dtos/create-enterprise.dto';
+
 import { InjectRepository } from '@nestjs/typeorm';
 import { ILike, Repository } from 'typeorm';
 
-import { UpdateEnterpriseDto } from './domain/dtos/update-enterprise.dto';
 import { AnimalsEntity } from 'src/entities/animals.entity';
+import { CreateAnimalDto } from './domain/dtos/create-animals.dto';
+import { UpdateAnimalDto } from './domain/dtos/update-animals.dto';
 
 @Injectable()
 export class AnimalsService {
@@ -14,10 +15,10 @@ export class AnimalsService {
   ) {}
 
   async createEnterprise(
-    createEnterpriseDto: CreateEnterpriseDto,
+    createAnimalsDto: CreateAnimalDto,
   ): Promise<AnimalsEntity> {
     try {
-      const hero = this.animalRepository.create(createEnterpriseDto);
+      const hero = this.animalRepository.create(createAnimalsDto);
 
       return this.animalRepository.save(hero);
     } catch (error) {
@@ -26,7 +27,7 @@ export class AnimalsService {
   }
 
   async patchEnterprise(
-    patchEnterprise: UpdateEnterpriseDto,
+    patchEnterprise: UpdateAnimalDto,
     id: string,
   ): Promise<AnimalsEntity> {
     try {
