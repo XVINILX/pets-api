@@ -3,10 +3,13 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsEnum,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
+import { AnimalGenders, AnimalType } from 'src/entities/animals.enum';
 
 export class UpdateAnimalDto {
   @ApiProperty({ required: false })
@@ -40,29 +43,43 @@ export class UpdateAnimalDto {
   state?: string;
 
   @ApiProperty({ required: false })
-  @IsString()
+  @IsUUID()
   @IsOptional()
-  street?: string;
-
-  @ApiProperty({ required: false })
-  @IsString()
-  @IsOptional()
-  zipCode?: string;
-
-  // @ApiProperty({ required: false })
-  // @IsUUID()
-  // @IsOptional()
-  // company?: string;
-
-  // @ApiProperty({ required: false })
-  // @IsUUID()
-  // @IsOptional()
-  // receiver?: string;
+  receiver?: string;
 
   @ApiProperty({ required: false })
   @IsDate()
   @IsOptional()
-  donatedAt?: Date;
+  initialDateAtDonation?: Date;
+
+  @ApiProperty({ required: false })
+  @IsNumber()
+  @IsOptional()
+  weight?: number;
+
+  @ApiProperty({ required: false, enum: AnimalGenders })
+  @IsEnum(AnimalGenders)
+  @IsOptional()
+  gender?: AnimalGenders;
+
+  @ApiProperty({ enum: AnimalType })
+  @IsEnum(AnimalType)
+  type: AnimalType;
+
+  @ApiProperty({ required: false })
+  @IsBoolean()
+  @IsOptional()
+  castrated?: boolean;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  specialTreatment?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  healthHistory?: string;
 
   @ApiProperty({ required: false })
   @IsString()
@@ -77,7 +94,7 @@ export class UpdateAnimalDto {
   @ApiProperty({ required: false, type: [String] })
   @IsArray()
   @IsOptional()
-  listOfPictures?: string[];
+  imagesList?: string[];
 
   @ApiProperty({ required: false })
   @IsDate()

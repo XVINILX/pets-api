@@ -19,6 +19,10 @@ import { PaginationAnimalsHandler } from './domain/query/pagination-animals.hand
 import { AuthModule } from 'src/core/auth/auth.module';
 import { AnimalsEntity } from 'src/entities/animals.entity';
 import { AnimalsService } from './animals.service';
+import { UserEntity } from 'src/entities/user.entity';
+import { EnterpriseEntity } from 'src/entities/enterprise.entity';
+import { FileEntity } from 'src/entities/file.entity';
+import { RaceAnimalsHandler } from './domain/query/race-animals.handler';
 
 const CommandHandler = [
   CreateAnimalsHandler,
@@ -30,10 +34,20 @@ const QueryHandler = [
   GetAnimalByIdHandler,
   ListAnimalsHandler,
   PaginationAnimalsHandler,
+  RaceAnimalsHandler,
 ];
 
 @Module({
-  imports: [TypeOrmModule.forFeature([AnimalsEntity]), CqrsModule, AuthModule],
+  imports: [
+    TypeOrmModule.forFeature([
+      AnimalsEntity,
+      UserEntity,
+      EnterpriseEntity,
+      FileEntity,
+    ]),
+    CqrsModule,
+    AuthModule,
+  ],
   controllers: [EnterpriseController],
   providers: [AnimalsService, ...CommandHandler, ...QueryHandler],
   exports: [AnimalsService],

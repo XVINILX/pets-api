@@ -1,21 +1,26 @@
 import { ApiProperty } from '@nestjs/swagger';
+import { Type } from 'class-transformer';
 import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsEnum,
+  IsNumber,
   IsOptional,
   IsString,
   IsUUID,
 } from 'class-validator';
+import { AnimalGenders, AnimalType } from 'src/entities/animals.enum';
 
 export class CreateAnimalDto {
   @ApiProperty()
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @ApiProperty()
   @IsString()
@@ -23,6 +28,7 @@ export class CreateAnimalDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   slug: string;
 
   @ApiProperty()
@@ -31,49 +37,74 @@ export class CreateAnimalDto {
 
   @ApiProperty()
   @IsString()
+  @IsOptional()
   state: string;
 
-  @ApiProperty()
-  @IsString()
-  street: string;
+  @ApiProperty({ required: false })
+  @IsUUID()
+  @IsOptional()
+  company?: string;
 
-  @ApiProperty()
-  @IsString()
-  zipCode: string;
-
-  // @ApiProperty()
-  // @IsUUID()
-  // company: string;
-
-  // @ApiProperty({ required: false })
-  // @IsUUID()
-  // @IsOptional()
-  // receiver?: string;
+  @ApiProperty({ required: false })
+  @IsUUID()
+  @IsOptional()
+  receiver?: string;
 
   @ApiProperty({ required: false })
   @IsDate()
   @IsOptional()
-  donatedAt?: Date;
+  @Type(() => Date)
+  initialDateAtDonation?: Date;
+
+  @ApiProperty()
+  @IsNumber()
+  weight: number;
+
+  @ApiProperty({ enum: AnimalGenders })
+  @IsEnum(AnimalGenders)
+  gender: AnimalGenders;
+
+  @ApiProperty({ enum: AnimalType })
+  @IsEnum(AnimalType)
+  type: AnimalType;
+
+  @ApiProperty()
+  @IsBoolean()
+  castrated: boolean;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  specialTreatment?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  healthHistory?: string;
 
   @ApiProperty()
   @IsString()
   status: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
-  principalPictureUuid: string;
+  @IsOptional()
+  principalPictureUuid?: string;
 
-  @ApiProperty({ type: [String] })
+  @ApiProperty({ type: [String], required: false })
   @IsArray()
-  listOfPictures: string[];
+  @IsOptional()
+  imagesList?: string[];
 
   @ApiProperty({ required: false })
   @IsDate()
   @IsOptional()
+  @Type(() => Date)
   adoptedAt?: Date;
 
   @ApiProperty()
   @IsDate()
+  @Type(() => Date)
   birthday: Date;
 
   @ApiProperty()

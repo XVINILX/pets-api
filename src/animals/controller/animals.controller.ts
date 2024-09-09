@@ -9,7 +9,7 @@ import {
 } from '@nestjs/common';
 
 import { ControllerApp } from 'src/core/decorators/controller-apitag.decorators';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { GetAnimalByIdCommand } from '../domain/query/find-by-id-animals.query';
@@ -23,6 +23,9 @@ import { CreateAnimalsCommand } from '../domain/command/create-animals.command';
 import { PaginationAnimalsQuery } from '../domain/query/pagination-animals.query';
 import { PatchAnimalCommand } from '../domain/command/patch-animals.command';
 import { DeleteAnimalsCommand } from '../domain/command/delete-animals.command';
+import { AnimalType } from 'src/entities/animals.enum';
+import { RaceAnimalsQuery } from '../domain/query/race-animals.query';
+import { BreedsListDto } from '../domain/dtos/breed-list.dto';
 
 // @UseGuards(AuthGuard)
 // @ApiBearerAuth('jwt')
@@ -51,6 +54,16 @@ export class EnterpriseController {
   })
   async findById(@Param('id') id: string) {
     return this.queryBus.execute(new GetAnimalByIdCommand(id));
+  }
+
+  @Get('type=:type')
+  @ApiResponse({
+    description: 'Searchs races by animal type',
+    type: BreedsListDto,
+  })
+  @ApiParam({ name: 'type', enum: AnimalType })
+  async listOfRaces(@Param('type') type: AnimalType) {
+    return this.queryBus.execute(new RaceAnimalsQuery(type));
   }
 
   @Get('items=:items/page=:page/search=:search')

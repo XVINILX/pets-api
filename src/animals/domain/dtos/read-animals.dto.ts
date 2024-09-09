@@ -3,10 +3,13 @@ import {
   IsArray,
   IsBoolean,
   IsDate,
+  IsEnum,
   IsOptional,
   IsString,
   IsUUID,
+  IsNumber,
 } from 'class-validator';
+import { AnimalGenders, AnimalType } from 'src/entities/animals.enum';
 
 export class ReadAnimalDto {
   @ApiProperty()
@@ -17,9 +20,10 @@ export class ReadAnimalDto {
   @IsString()
   name: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
-  description: string;
+  @IsOptional()
+  description?: string;
 
   @ApiProperty()
   @IsString()
@@ -37,17 +41,10 @@ export class ReadAnimalDto {
   @IsString()
   state: string;
 
-  @ApiProperty()
-  @IsString()
-  street: string;
-
-  @ApiProperty()
-  @IsString()
-  zipCode: string;
-
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsUUID()
-  company: string;
+  @IsOptional()
+  company?: string;
 
   @ApiProperty({ required: false })
   @IsUUID()
@@ -57,19 +54,50 @@ export class ReadAnimalDto {
   @ApiProperty({ required: false })
   @IsDate()
   @IsOptional()
-  donatedAt?: Date;
+  initialDateAtDonation?: Date;
+
+  @ApiProperty()
+  @IsNumber()
+  @IsOptional()
+  weight: number;
+
+  @ApiProperty({ enum: AnimalGenders })
+  @IsEnum(AnimalGenders)
+  @IsOptional()
+  gender: AnimalGenders;
+
+  @ApiProperty({ enum: AnimalType })
+  @IsEnum(AnimalType)
+  @IsOptional()
+  type: AnimalType;
+
+  @ApiProperty()
+  @IsBoolean()
+  castrated: boolean;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  specialTreatment?: string;
+
+  @ApiProperty({ required: false })
+  @IsString()
+  @IsOptional()
+  healthHistory?: string;
 
   @ApiProperty()
   @IsString()
   status: string;
 
-  @ApiProperty()
+  @ApiProperty({ required: false })
   @IsString()
-  principalPictureUuid: string;
+  @IsOptional()
+  principalPictureUuid?: string;
 
-  @ApiProperty({ type: [String] })
+  @ApiProperty({ type: [String], required: false })
   @IsArray()
-  listOfPictures: string[];
+  @IsOptional()
+  listOfPictures?: string[];
 
   @ApiProperty({ required: false })
   @IsDate()
