@@ -18,6 +18,18 @@ export class UserEntity {
   @Column({ unique: true })
   email: string;
 
+  @Column({ nullable: true })
+  firstName: string;
+
+  @Column({ nullable: true })
+  lastName: string;
+
+  @Column({ nullable: true })
+  picture: string;
+
+  @Column({ nullable: true })
+  googleId: string;
+
   @Column()
   password: string;
 

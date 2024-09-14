@@ -17,6 +17,7 @@ import { FileEntity } from 'src/entities/file.entity';
 import { FilesService } from './files.service';
 import { FileController } from './controller/files.controller';
 import { S3Service } from './integration/aws.service';
+import { AzureBlobService } from './integration/azure.service';
 
 const CommandHandler = [];
 
@@ -25,7 +26,13 @@ const QueryHandler = [];
 @Module({
   imports: [TypeOrmModule.forFeature([FileEntity]), CqrsModule, AuthModule],
   controllers: [FileController],
-  providers: [FilesService, S3Service, ...CommandHandler, ...QueryHandler],
+  providers: [
+    FilesService,
+    AzureBlobService,
+    S3Service,
+    ...CommandHandler,
+    ...QueryHandler,
+  ],
   exports: [FilesService],
 })
 export class FilesModule implements NestModule {

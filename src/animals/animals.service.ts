@@ -9,6 +9,7 @@ import { UpdateAnimalDto } from './domain/dtos/update-animals.dto';
 import { EnterpriseEntity } from 'src/entities/enterprise.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import { FileEntity } from 'src/entities/file.entity';
+import { randomInt } from 'crypto';
 
 @Injectable()
 export class AnimalsService {
@@ -41,24 +42,65 @@ export class AnimalsService {
       });
 
       const animal = this.animalRepository.create({ ...data });
+      if (companyEntity) animal.company = companyEntity;
 
-      animal.company = companyEntity;
-      animal.receiver = receiverEntity;
+      if (receiverEntity) animal.receiver = receiverEntity;
 
-      const principalPictureEntity = await this.fileRepository.findOneBy({
-        id: principalPictureUuid,
-      });
-      animal.principalPicture = principalPictureEntity;
+      if (principalPictureUuid) {
+        const principalPictureEntity = await this.fileRepository.findOneBy({
+          id: principalPictureUuid,
+        });
+        animal.principalPicture = principalPictureEntity;
+      }
 
       if (imagesList && imagesList.length > 0) {
-        const images = await this.fileRepository.findBy({ id: In(imagesList) });
-        animal.imagesList = images;
+        const imageListId = [];
+        for (const image of imagesList) {
+          await this.fileRepository.update(
+            {
+              id: image.imageUuid,
+            },
+            { order: image.order },
+          );
+
+          const imageQuery = await this.fileRepository.findOne({
+            where: { id: image.imageUuid },
+          });
+
+          imageListId.push(imageQuery);
+        }
+
+        animal.imagesList = imageListId;
       }
+      const slug = await this.generateUniqueSlug(animal.name);
+      animal.slug = slug;
 
       return this.animalRepository.save(animal);
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
+  }
+
+  private async generateUniqueSlug(name: string): Promise<string> {
+    const firstName = name.split(' ')[0].toLowerCase(); // Get the first name and lowercase it
+    let slug = '';
+    let isUnique = false;
+
+    while (!isUnique) {
+      const randomNumber = randomInt(1000, 9999); // Generate a random 4-digit number
+      slug = `${firstName}-${randomNumber}`; // Combine the first name and random number
+
+      // Check if the slug already exists in the database
+      const existingAnimal = await this.animalRepository.findOne({
+        where: { slug },
+      });
+
+      if (!existingAnimal) {
+        isUnique = true; // If no existing slug is found, it's unique
+      }
+    }
+
+    return slug;
   }
 
   async patchEnterprise(
@@ -119,6 +161,18 @@ export class AnimalsService {
       }
 
       return enterpriseList ? enterpriseList : [];
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async findAnimalBySlug(slug: string) {
+    try {
+      const enterprise = await this.animalRepository.findOne({
+        where: { slug },
+      });
+
+      return enterprise ? enterprise : null;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

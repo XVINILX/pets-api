@@ -1,4 +1,9 @@
-import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import {
+  HttpException,
+  HttpStatus,
+  Injectable,
+  OnModuleInit,
+} from '@nestjs/common';
 
 import { InjectRepository } from '@nestjs/typeorm';
 import { Repository } from 'typeorm';
@@ -7,7 +12,7 @@ import { UserEntity } from 'src/entities/user.entity';
 import { CreateUserDto } from './domain/dtos/create-user.dto';
 import * as bcrypt from 'bcrypt';
 @Injectable()
-export class UserService {
+export class UserService implements OnModuleInit {
   constructor(
     @InjectRepository(UserEntity)
     private userRepository: Repository<UserEntity>,
@@ -17,6 +22,25 @@ export class UserService {
    * @param patchUser UpdateUserDto - Data to change
    * @param id string - User id
    */
+
+  async onModuleInit(): Promise<void> {
+    try {
+      const adminExist = await this.userRepository.exist({
+        where: { email: process.env.ADMIN_EMAIL || 'admin@admin.com' },
+      });
+
+      if (adminExist) {
+        return;
+      }
+
+      await this.createUser({
+        email: process.env.ADMIN_EMAIL || 'admin@admin.com',
+        password: process.env.ADMIN_PASSWORD || 'Admin@123',
+      });
+    } catch (e) {
+      console.error(e);
+    }
+  }
 
   async createUser(createUser: CreateUserDto): Promise<UserEntity> {
     try {

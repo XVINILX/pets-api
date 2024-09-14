@@ -15,18 +15,26 @@ export class AuthService {
     private readonly userService: UserService,
   ) {}
 
-  async createToken(user: CreateUserDto, id: string) {
+  async createToken(email: string, id: string) {
     return {
       access_token: this.jwtService.sign(
         {
           sub: id,
-          email: user.email,
+          email: email,
         },
         {
           expiresIn: '7 days',
         },
       ),
     };
+  }
+
+  async googleLogin(req: any): Promise<AuthAuthenticateDTO> {
+    if (!req.user) {
+      throw new HttpException('E-mail not found', HttpStatus.BAD_REQUEST);
+    }
+
+    return await this.loginGoogle(req.user.email);
   }
 
   async checkToken(token: string) {
@@ -38,6 +46,25 @@ export class AuthService {
       return (await this.userService.findUser(user.sub)) ? true : false;
     } catch (error) {
       return false;
+    }
+  }
+
+  async loginGoogle(email: string) {
+    try {
+      const user = await this.userService.findUserByEmail(email);
+
+      if (!user) {
+        throw new HttpException('E-mail not found', HttpStatus.BAD_REQUEST);
+      }
+
+      const authToken = await this.createToken(email, user.id);
+
+      return <AuthAuthenticateDTO>{
+        email: email,
+        accessToken: authToken.access_token,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }
   }
 
@@ -55,7 +82,7 @@ export class AuthService {
         throw new HttpException(`Invalid password`, HttpStatus.BAD_REQUEST);
       }
 
-      const authToken = await this.createToken(authLoginDTO, user.id);
+      const authToken = await this.createToken(authLoginDTO.email, user.id);
 
       return <AuthAuthenticateDTO>{
         email: authLoginDTO.email,
@@ -70,7 +97,7 @@ export class AuthService {
     try {
       const newUser = await this.userService.createUser(data);
 
-      const authToken = await this.createToken(data, newUser.id);
+      const authToken = await this.createToken(data.email, newUser.id);
 
       return <AuthRegisterDTO>{
         email: newUser.email,
@@ -88,7 +115,7 @@ export class AuthService {
         updateAuthDto.id,
       );
 
-      const authToken = await this.createToken(newUser, newUser.id);
+      const authToken = await this.createToken(newUser.email, newUser.id);
 
       return <AuthRegisterDTO>{
         email: newUser.email,

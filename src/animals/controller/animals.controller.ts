@@ -26,6 +26,7 @@ import { DeleteAnimalsCommand } from '../domain/command/delete-animals.command';
 import { AnimalType } from 'src/entities/animals.enum';
 import { RaceAnimalsQuery } from '../domain/query/race-animals.query';
 import { BreedsListDto } from '../domain/dtos/breed-list.dto';
+import { GetAnimalBySlugCommand } from '../domain/query/find-by-slug-animals.query';
 
 // @UseGuards(AuthGuard)
 // @ApiBearerAuth('jwt')
@@ -54,6 +55,15 @@ export class EnterpriseController {
   })
   async findById(@Param('id') id: string) {
     return this.queryBus.execute(new GetAnimalByIdCommand(id));
+  }
+
+  @Get('/slug=:slug')
+  @ApiResponse({
+    description: 'Searchs an Enterprise By Id',
+    type: ReadAnimalDto,
+  })
+  async findBySlug(@Param('slug') slug: string) {
+    return this.queryBus.execute(new GetAnimalBySlugCommand(slug));
   }
 
   @Get('type=:type')

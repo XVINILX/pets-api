@@ -7,6 +7,7 @@ import { RegisterUserHandler } from './domain/commands/register-user.handler';
 import { CqrsModule } from '@nestjs/cqrs';
 import { LoginUserHandler } from './domain/commands/login-user.handler';
 import { ResetUserHandler } from './domain/commands/reset-user.handler';
+import { GoogleStrategy } from './google.strategy';
 
 const CommandHandler = [
   RegisterUserHandler,
@@ -20,7 +21,7 @@ const CommandHandler = [
     CqrsModule,
   ],
   controllers: [AuthController],
-  providers: [AuthService, ...CommandHandler],
+  providers: [AuthService, GoogleStrategy, ...CommandHandler],
   exports: [AuthService],
 })
 export class AuthModule {}

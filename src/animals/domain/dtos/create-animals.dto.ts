@@ -12,6 +12,16 @@ import {
 } from 'class-validator';
 import { AnimalGenders, AnimalType } from 'src/entities/animals.enum';
 
+export class ImageAnimalList {
+  @ApiProperty({ type: String, required: false })
+  @IsOptional()
+  imageUuid: string;
+
+  @ApiProperty({ type: Number, required: false })
+  @IsOptional()
+  order: number;
+}
+
 export class CreateAnimalDto {
   @ApiProperty()
   @IsString()
@@ -70,6 +80,7 @@ export class CreateAnimalDto {
 
   @ApiProperty()
   @IsBoolean()
+  @IsOptional()
   castrated: boolean;
 
   @ApiProperty({ required: false })
@@ -91,10 +102,10 @@ export class CreateAnimalDto {
   @IsOptional()
   principalPictureUuid?: string;
 
-  @ApiProperty({ type: [String], required: false })
+  @ApiProperty({ type: [ImageAnimalList], required: false })
   @IsArray()
   @IsOptional()
-  imagesList?: string[];
+  imagesList?: ImageAnimalList[];
 
   @ApiProperty({ required: false })
   @IsDate()

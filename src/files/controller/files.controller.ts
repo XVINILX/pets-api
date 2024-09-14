@@ -1,31 +1,46 @@
-import { Controller, Get, Delete, Query, Body, Post } from '@nestjs/common';
-import { S3Service } from '../integration/aws.service';
+import {
+  Controller,
+  Delete,
+  Query,
+  Post,
+  UseInterceptors,
+  UploadedFile,
+} from '@nestjs/common';
+
 import { CreateFileDto } from '../domain/dtos/create-file.dto';
 import { FilesService } from '../files.service';
+import { FileInterceptor } from '@nestjs/platform-express';
+import { Express } from 'express';
+import { ApiBody, ApiConsumes } from '@nestjs/swagger';
 
 @Controller('files')
 export class FileController {
-  constructor(
-    private readonly s3Service: S3Service,
-    private readonly fileService: FilesService,
-  ) {}
+  constructor(private readonly fileService: FilesService) {}
 
-  @Get('presigned-url')
-  async getPresignedUrl(@Query('key') key: string): Promise<{ url: string }> {
-    const url = await this.s3Service.generatePresignedUrl(key);
-    return { url };
-  }
-
-  @Post('/')
+  @Post('/upload')
+  @UseInterceptors(FileInterceptor('file'))
+  @ApiConsumes('multipart/form-data')
+  @ApiBody({
+    description: 'Upload a file',
+    schema: {
+      type: 'object',
+      properties: {
+        file: {
+          type: 'string',
+          format: 'binary',
+        },
+      },
+    },
+  })
   async createFile(
-    @Body() createFileDto: CreateFileDto,
+    @UploadedFile() file: Express.Multer.File,
   ): Promise<CreateFileDto> {
-    const file = await this.fileService.createFile(createFileDto);
-    return file;
+    const createdFile = await this.fileService.createFile(file);
+    return createdFile;
   }
 
   @Delete('object')
   async deleteObject(@Query('key') key: string): Promise<void> {
-    await this.s3Service.deleteObject(key);
+    await this.fileService.deleteFile(key);
   }
 }

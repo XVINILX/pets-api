@@ -19,6 +19,9 @@ export class FileEntity {
   public filename: string;
 
   @Column({ type: 'int', nullable: true })
+  public order?: number;
+
+  @Column({ type: 'int', nullable: true })
   public size?: number;
 
   @Column({ nullable: true })
@@ -27,12 +30,20 @@ export class FileEntity {
   @Column({ nullable: true })
   public description?: string;
 
+  @Column({ nullable: true })
+  public blobName: string;
+
   @OneToOne(
     () => AnimalsEntity,
     (animal: AnimalsEntity) => animal.principalPicture,
+    { nullable: true },
   )
   public animalPrincipalImage: AnimalsEntity;
 
-  @ManyToOne(() => AnimalsEntity, (animal: AnimalsEntity) => animal.imagesList)
+  @ManyToOne(
+    () => AnimalsEntity,
+    (animal: AnimalsEntity) => animal.imagesList,
+    { nullable: true },
+  )
   public animalImageList: AnimalsEntity;
 }

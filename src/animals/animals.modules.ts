@@ -23,6 +23,7 @@ import { UserEntity } from 'src/entities/user.entity';
 import { EnterpriseEntity } from 'src/entities/enterprise.entity';
 import { FileEntity } from 'src/entities/file.entity';
 import { RaceAnimalsHandler } from './domain/query/race-animals.handler';
+import { GetAnimalBySlugHandler } from './domain/query/find-by-slug-animals.handler';
 
 const CommandHandler = [
   CreateAnimalsHandler,
@@ -34,6 +35,7 @@ const QueryHandler = [
   GetAnimalByIdHandler,
   ListAnimalsHandler,
   PaginationAnimalsHandler,
+  GetAnimalBySlugHandler,
   RaceAnimalsHandler,
 ];
 
