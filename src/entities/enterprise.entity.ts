@@ -11,6 +11,7 @@ import {
 import { AnimalsEntity } from './animals.entity';
 import { UserEntity } from './user.entity';
 import { PageConfigEntity } from './page-config.entity';
+import { QuestionnairyConfigEntity } from './questionnairyConfig.entity';
 
 @Entity()
 export class EnterpriseEntity {
@@ -59,6 +60,14 @@ export class EnterpriseEntity {
     { nullable: true },
   )
   public pageConfig: PageConfigEntity;
+
+  @OneToOne(
+    () => QuestionnairyConfigEntity,
+    (questionnairyConfig: QuestionnairyConfigEntity) =>
+      questionnairyConfig.enterprise,
+    { nullable: true },
+  )
+  public questionnairyConfig: QuestionnairyConfigEntity;
 
   @Column({ nullable: true })
   openingDate: Date;

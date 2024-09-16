@@ -24,6 +24,7 @@ import { EnterpriseEntity } from 'src/entities/enterprise.entity';
 import { FileEntity } from 'src/entities/file.entity';
 import { RaceAnimalsHandler } from './domain/query/race-animals.handler';
 import { GetAnimalBySlugHandler } from './domain/query/find-by-slug-animals.handler';
+import { AnswerConfigEntity } from 'src/entities/answerConfig.entity';
 
 const CommandHandler = [
   CreateAnimalsHandler,
@@ -46,6 +47,7 @@ const QueryHandler = [
       UserEntity,
       EnterpriseEntity,
       FileEntity,
+      AnswerConfigEntity,
     ]),
     CqrsModule,
     AuthModule,

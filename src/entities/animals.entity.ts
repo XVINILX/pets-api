@@ -13,6 +13,7 @@ import { EnterpriseEntity } from './enterprise.entity';
 import { UserEntity } from './user.entity';
 import { FileEntity } from './file.entity';
 import { AnimalGenders, AnimalType } from './animals.enum';
+import { AnswerConfigEntity } from './answerConfig.entity';
 
 @Entity()
 export class AnimalsEntity {
@@ -71,6 +72,13 @@ export class AnimalsEntity {
   })
   public receiver: UserEntity;
 
+  @OneToMany(
+    () => AnswerConfigEntity,
+    (answers: AnswerConfigEntity) => answers.animal,
+    { nullable: true },
+  )
+  public answers: AnswerConfigEntity[];
+
   @Column({ nullable: true })
   public initialDateAtDonation: Date;
   /*OK*/
@@ -114,7 +122,6 @@ export class AnimalsEntity {
   /*OK*/
 
   @OneToMany(() => FileEntity, (image: FileEntity) => image.animalImageList)
-  @JoinColumn()
   public imagesList: FileEntity[];
   /*OK*/
 

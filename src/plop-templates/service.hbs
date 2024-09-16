@@ -1,0 +1,151 @@
+import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
+import { InjectRepository } from '@nestjs/typeorm';
+import { ILike, Repository } from 'typeorm';
+import { {{pascalCase name}}Entity } from 'src/entities/{{dashCase name}}.entity';
+import { EnterpriseEntity } from 'src/entities/enterprise.entity';
+import { AuthJwtDto } from 'src/core/auth/domain/dto/auth-jwt.dto';
+import { FileEntity } from 'src/entities/file.entity';
+import { Create{{pascalCase name}}Dto } from './domain/dtos/create-{{dashCase name}}.dto';
+import { Update{{pascalCase name}}Dto } from './domain/dtos/update-{{dashCase name}}.dto';
+
+@Injectable()
+export class {{pascalCase name}}Service {
+constructor(
+@InjectRepository({{pascalCase name}}Entity)
+private {{camelCase name}}Repository: Repository<{{pascalCase name}}Entity>,
+
+    @InjectRepository(EnterpriseEntity)
+    private enterpriseRepository: Repository<EnterpriseEntity>,
+
+        @InjectRepository(FileEntity)
+        private fileRepository: Repository<FileEntity>,
+            ) {}
+
+            async create{{pascalCase name}}(
+            create{{pascalCase name}}Dto: Create{{pascalCase name}}Dto,
+            user: AuthJwtDto,
+            ): Promise<{{pascalCase name}}Entity> {
+                try {
+                const enterprise = await this.enterpriseRepository.findOne({
+                where: { user: { id: user.id } },
+                });
+
+                if (!enterprise) {
+                throw new HttpException('Enterprise not found', HttpStatus.NOT_FOUND);
+                }
+
+                const avatarImageReq = create{{pascalCase name}}Dto.avatarImage
+                ? await this.fileRepository.findOne({
+                where: { id: create{{pascalCase name}}Dto.avatarImage },
+                })
+                : null;
+
+                const backgroundImage = create{{pascalCase name}}Dto.backgroundImage
+                ? await this.fileRepository.findOne({
+                where: { id: create{{pascalCase name}}Dto.backgroundImage },
+                })
+                : null;
+
+                const {{camelCase name}} = this.{{camelCase name}}Repository.create({
+                ...create{{pascalCase name}}Dto,
+                backgroundImage: backgroundImage,
+                enterprise: enterprise,
+                avatarImage: avatarImageReq,
+                });
+
+                return await this.{{camelCase name}}Repository.save({{camelCase name}});
+                } catch (error) {
+                throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+                }
+                }
+
+                async patch{{pascalCase name}}(
+                patch{{pascalCase name}}Dto: Update{{pascalCase name}}Dto,
+                user: AuthJwtDto,
+                id: string,
+                ): Promise<{{pascalCase name}}Entity> {
+                    try {
+                    const enterprise = await this.enterpriseRepository.findOne({
+                    where: { user: { id: user.id } },
+                    });
+
+                    if (!enterprise) {
+                    throw new HttpException('Enterprise not found', HttpStatus.NOT_FOUND);
+                    }
+
+                    const avatarImageReq = patch{{pascalCase name}}Dto.avatarImage
+                    ? await this.fileRepository.findOne({
+                    where: { id: patch{{pascalCase name}}Dto.avatarImage },
+                    })
+                    : null;
+
+                    const backgroundImage = patch{{pascalCase name}}Dto.backgroundImage
+                    ? await this.fileRepository.findOne({
+                    where: { id: patch{{pascalCase name}}Dto.backgroundImage },
+                    })
+                    : null;
+
+                    const {{camelCase name}} = await this.{{camelCase name}}Repository.update(
+                    { id: id },
+                    {
+                    ...patch{{pascalCase name}}Dto,
+                    backgroundImage: backgroundImage,
+                    enterprise: enterprise,
+                    avatarImage: avatarImageReq,
+                    },
+                    );
+
+                    return await this.{{camelCase name}}Repository.save({{camelCase name}});
+                    } catch (error) {
+                    throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+                    }
+                    }
+
+                    async listEnterprise(search: string, items?: number, page?: number) {
+                    try {
+                    const enterpriseList = await this.{{camelCase name}}Repository.findAndCountBy({
+                    backgroundImage: ILike(`%${search}%`),
+                    });
+
+                    if (items && page) {
+                    const initialSlice = items * page;
+                    const finalSlice = items * page + items;
+
+                    const paginatedEnterpriseList = enterpriseList[0].slice(
+                    initialSlice,
+                    finalSlice,
+                    );
+
+                    return paginatedEnterpriseList ? paginatedEnterpriseList : [];
+                    }
+
+                    return enterpriseList ? enterpriseList : [];
+                    } catch (error) {
+                    throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+                    }
+                    }
+
+                    async findEnterprise(id: string) {
+                    try {
+                    const enterprise = await this.{{camelCase name}}Repository.findOne({
+                    where: { id },
+                    });
+
+                    return enterprise ? enterprise : null;
+                    } catch (error) {
+                    throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+                    }
+                    }
+
+                    async deleteUser(id: string): Promise<boolean> {
+                        try {
+                        await this.{{camelCase name}}Repository.delete({ id: id });
+                        const checkEnterprise = await this.{{camelCase name}}Repository.exist({
+                        where: { id: id },
+                        });
+                        return !checkEnterprise;
+                        } catch (error) {
+                        throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+                        }
+                        }
+                        }

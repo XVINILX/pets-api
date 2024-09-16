@@ -15,6 +15,10 @@ import { EnterpriseEntity } from './entities/enterprise.entity';
 import { FileEntity } from './entities/file.entity';
 import { PageConfigEntity } from './entities/page-config.entity';
 import { UserEntity } from './entities/user.entity';
+import { AnswerConfigEntity } from './entities/answerConfig.entity';
+import { AnswerEntity } from './entities/answer.entity';
+import { QuestionEntity } from './entities/question.entity';
+import { QuestionnairyConfigEntity } from './entities/questionnairyConfig.entity';
 
 @Module({
   imports: [
@@ -37,6 +41,10 @@ import { UserEntity } from './entities/user.entity';
         PageConfigEntity,
         UserEntity,
         FileEntity,
+        AnswerConfigEntity,
+        AnswerEntity,
+        QuestionEntity,
+        QuestionnairyConfigEntity,
       ],
       synchronize: true,
       ssl: {

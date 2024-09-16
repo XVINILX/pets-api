@@ -1,6 +1,7 @@
 import {
   Column,
   Entity,
+  JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
@@ -60,5 +61,6 @@ export class FileEntity {
     (animal: AnimalsEntity) => animal.imagesList,
     { nullable: true },
   )
-  public animalImageList: AnimalsEntity[];
+  @JoinColumn()
+  public animalImageList: AnimalsEntity;
 }
