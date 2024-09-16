@@ -44,12 +44,19 @@ export class AnimalsEntity {
   public type: AnimalType;
   /*OK*/
 
-  @Column()
+  @Column({ nullable: true })
   public city: string;
   /*OK*/
 
-  @Column()
+  @Column({ nullable: true })
   public state: string;
+
+  @Column({ nullable: true })
+  public street: string;
+
+  @Column({ nullable: true })
+  public zipCode: string;
+
   /*OK*/
 
   @ManyToOne(

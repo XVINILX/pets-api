@@ -1,17 +1,17 @@
 import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { DeleteEnterpriseCommand } from './delete-animals.command';
+import { DeletePageConfigCommand } from './delete-page-config.command';
 
 import { PageConfigService } from 'src/pageConfig/pageConfig.service';
 
-@CommandHandler(DeleteEnterpriseCommand)
-export class DeleteEnterpriseHandler
-  implements ICommandHandler<DeleteEnterpriseCommand>
+@CommandHandler(DeletePageConfigCommand)
+export class DeletePageConfigHandler
+  implements ICommandHandler<DeletePageConfigCommand>
 {
   constructor(private repository: PageConfigService) {}
 
-  async execute(command: DeleteEnterpriseCommand) {
+  async execute(command: DeletePageConfigCommand) {
     try {
       const { id } = command;
       const enteprise = await this.repository.deleteUser(id);

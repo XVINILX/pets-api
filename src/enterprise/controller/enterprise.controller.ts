@@ -11,17 +11,23 @@ import {
 import { ControllerApp } from 'src/core/decorators/controller-apitag.decorators';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateEnterpriseDto } from '../domain/dtos/create-enterprise.dto';
+
 import { CreateEnterpriseCommand } from '../domain/command/create-enteprise.command';
-import { UpdateEnterpriseDto } from '../domain/dtos/update-enterprise.dto';
+
 import { PatchEnterpriseCommand } from '../domain/command/patch-enteprise.command';
 import { DeleteEnterpriseCommand } from '../domain/command/delete-enteprise.command';
-import { ReadEnterpriseDto } from '../domain/dtos/read-enterprise.dto';
+
 import { DeleteEnterpriseDto } from '../domain/dtos/delete-enterprise.dto';
 import { GetEnterpriseByIdQuery } from '../domain/query/find-by-id-enterprise.query';
-import { ListEnterpriseDto } from '../domain/dtos/list-enterprise.dto';
+
 import { PaginationEnterpriseQuery } from '../domain/query/pagination-enterprise.query';
 import { AuthGuard } from 'src/core/guards/auth.guards';
+import { User } from 'src/core/decorators/user.decorators';
+import { AuthJwtDto } from 'src/core/auth/domain/dto/auth-jwt.dto';
+import { ReadEnterpriseDto } from '../domain/dtos/read-enterprise.dto';
+import { CreateEnterpriseDto } from '../domain/dtos/create-enterprise.dto';
+import { ListEnterpriseDto } from 'src/pageConfig/domain/dtos/list-page-config.dto';
+import { UpdateEnterpriseDto } from '../domain/dtos/update-enterprise.dto';
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth('jwt')
@@ -37,9 +43,12 @@ export class EnterpriseController {
     description: 'Creates an Enterprise',
     type: ReadEnterpriseDto,
   })
-  async create(@Body() enterpriseDto: CreateEnterpriseDto) {
+  async create(
+    @Body() enterpriseDto: CreateEnterpriseDto,
+    @User() user: AuthJwtDto,
+  ) {
     return await this.commandBus.execute(
-      new CreateEnterpriseCommand(enterpriseDto),
+      new CreateEnterpriseCommand(enterpriseDto, user),
     );
   }
 

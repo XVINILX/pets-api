@@ -1,5 +1,12 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsDate, IsString, IsUUID } from 'class-validator';
+import {
+  IsArray,
+  IsBoolean,
+  IsDate,
+  IsOptional,
+  IsString,
+  IsUUID,
+} from 'class-validator';
 
 export class ReadEnterpriseDto {
   @ApiProperty()
@@ -16,23 +23,29 @@ export class ReadEnterpriseDto {
 
   @ApiProperty()
   @IsString()
-  cnpj: string;
+  city: string;
 
   @ApiProperty()
   @IsString()
-  regional: string;
+  @IsOptional()
+  state: string;
 
   @ApiProperty()
-  @IsBoolean()
-  activate: boolean;
+  @IsString()
+  street: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  zipCode: string;
+
+  @ApiProperty()
+  @IsString()
+  cnpj: string;
 
   @ApiProperty()
   @IsDate()
   openingDate: Date;
-
-  @ApiProperty()
-  @IsArray()
-  especialidades: string[];
 
   @ApiProperty()
   createdAt: Date;

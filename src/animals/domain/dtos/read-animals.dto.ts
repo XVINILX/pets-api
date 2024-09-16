@@ -41,6 +41,15 @@ export class ReadAnimalDto {
   @IsString()
   state: string;
 
+  @ApiProperty()
+  @IsString()
+  street: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  zipCode: string;
+
   @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()

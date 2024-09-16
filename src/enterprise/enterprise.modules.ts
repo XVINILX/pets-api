@@ -18,6 +18,7 @@ import { GetEnterpriseByIdHandler } from './domain/query/find-by-id-enterprise.h
 import { ListEnterpriseHandler } from './domain/query/list-enterprise.handler';
 import { PaginationEnterpriseHandler } from './domain/query/pagination-enterprise.handler';
 import { AuthModule } from 'src/core/auth/auth.module';
+import { UserEntity } from 'src/entities/user.entity';
 
 const CommandHandler = [
   CreateEnterpriseHandler,
@@ -34,7 +35,7 @@ const QueryHandler = [
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([EnterpriseEntity]),
+    TypeOrmModule.forFeature([EnterpriseEntity, UserEntity]),
     CqrsModule,
     AuthModule,
   ],

@@ -2,20 +2,21 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 
 import { HttpException, HttpStatus } from '@nestjs/common';
 
-import { PatchEnterpriseCommand } from './patch-animals.command';
 import { PageConfigService } from 'src/pageConfig/pageConfig.service';
+import { PatchPageConfigCommand } from './patch-page-config.command';
 
-@CommandHandler(PatchEnterpriseCommand)
-export class PatchEnterpriseHandler
-  implements ICommandHandler<PatchEnterpriseCommand>
+@CommandHandler(PatchPageConfigCommand)
+export class PatchPageConfigHandler
+  implements ICommandHandler<PatchPageConfigCommand>
 {
   constructor(private repository: PageConfigService) {}
 
-  async execute(command: PatchEnterpriseCommand) {
+  async execute(command: PatchPageConfigCommand) {
     try {
-      const { patchEnterpriseDto, id } = command;
-      const enteprise = await this.repository.patchEnterprise(
-        patchEnterpriseDto,
+      const { patchPageConfigDto, id, user } = command;
+      const enteprise = await this.repository.patchPageConfig(
+        patchPageConfigDto,
+        user,
         id,
       );
 

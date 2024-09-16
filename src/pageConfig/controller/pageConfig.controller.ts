@@ -11,17 +11,20 @@ import {
 import { ControllerApp } from 'src/core/decorators/controller-apitag.decorators';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
-import { CreateEnterpriseDto } from '../domain/dtos/create-enterprise.dto';
-import { CreateEnterpriseCommand } from '../domain/command/create-animals.command';
-import { UpdateEnterpriseDto } from '../domain/dtos/update-enterprise.dto';
-import { PatchEnterpriseCommand } from '../domain/command/patch-animals.command';
-import { DeleteEnterpriseCommand } from '../domain/command/delete-animals.command';
-import { ReadEnterpriseDto } from '../domain/dtos/read-enterprise.dto';
-import { DeleteEnterpriseDto } from '../domain/dtos/delete-enterprise.dto';
+import { CreatePageConfigDto } from '../domain/dtos/create-page-config.dto';
+
+import { DeleteEnterpriseDto } from '../domain/dtos/delete-page-config.dto';
 import { GetEnterpriseByIdQuery } from '../domain/query/find-by-id-enterprise.query';
-import { ListEnterpriseDto } from '../domain/dtos/list-enterprise.dto';
+import { ListEnterpriseDto } from '../domain/dtos/list-page-config.dto';
 import { PaginationEnterpriseQuery } from '../domain/query/pagination-enterprise.query';
 import { AuthGuard } from 'src/core/guards/auth.guards';
+import { User } from 'src/core/decorators/user.decorators';
+import { AuthJwtDto } from 'src/core/auth/domain/dto/auth-jwt.dto';
+import { DeleteEnterpriseCommand } from 'src/enterprise/domain/command/delete-enteprise.command';
+import { ReadPageConfigDto } from '../domain/dtos/read-page-config.dto';
+import { CreatePageConfigCommand } from '../domain/command/create-page-config.command';
+import { PatchPageConfigCommand } from '../domain/command/patch-page-config.command';
+import { UpdatePageConfigDto } from '../domain/dtos/update-page-config.dto';
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth('jwt')
@@ -35,18 +38,21 @@ export class EnterpriseController {
   @Post()
   @ApiResponse({
     description: 'Creates an Enterprise',
-    type: ReadEnterpriseDto,
+    type: ReadPageConfigDto,
   })
-  async create(@Body() enterpriseDto: CreateEnterpriseDto) {
+  async create(
+    @Body() enterpriseDto: CreatePageConfigDto,
+    @User() user: AuthJwtDto,
+  ) {
     return await this.commandBus.execute(
-      new CreateEnterpriseCommand(enterpriseDto),
+      new CreatePageConfigCommand(enterpriseDto, user),
     );
   }
 
   @Get('/id=:id')
   @ApiResponse({
     description: 'Searchs an Enterprise By Id',
-    type: ReadEnterpriseDto,
+    type: ReadPageConfigDto,
   })
   async findById(@Param('id') id: string) {
     return this.queryBus.execute(new GetEnterpriseByIdQuery(id));
@@ -70,14 +76,15 @@ export class EnterpriseController {
   @Patch(':id/')
   @ApiResponse({
     description: 'Update an Enterprise',
-    type: ReadEnterpriseDto,
+    type: ReadPageConfigDto,
   })
   async updateByCompleted(
-    @Body() patchEnterprise: UpdateEnterpriseDto,
+    @Body() patchEnterprise: UpdatePageConfigDto,
+    @User() user: AuthJwtDto,
     @Param('id') id: string,
   ) {
     return this.commandBus.execute(
-      new PatchEnterpriseCommand(patchEnterprise, id),
+      new PatchPageConfigCommand(patchEnterprise, id, user),
     );
   }
 

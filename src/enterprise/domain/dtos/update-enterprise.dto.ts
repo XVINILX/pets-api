@@ -1,5 +1,5 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsArray, IsBoolean, IsString } from 'class-validator';
+import { IsArray, IsBoolean, IsOptional, IsString } from 'class-validator';
 
 export class UpdateEnterpriseDto {
   @ApiProperty()
@@ -16,15 +16,21 @@ export class UpdateEnterpriseDto {
 
   @ApiProperty()
   @IsString()
-  regional?: string;
+  city: string;
 
   @ApiProperty()
-  @IsBoolean()
-  activate?: boolean;
+  @IsString()
+  @IsOptional()
+  state: string;
 
   @ApiProperty()
-  @IsArray()
-  especialidades?: string[];
+  @IsString()
+  street: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  zipCode: string;
 
   @ApiProperty()
   openingDate?: Date;

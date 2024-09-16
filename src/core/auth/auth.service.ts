@@ -43,7 +43,7 @@ export class AuthService {
 
       const user = this.jwtService.decode(finalToken[1]);
 
-      return (await this.userService.findUser(user.sub)) ? true : false;
+      return user;
     } catch (error) {
       return false;
     }

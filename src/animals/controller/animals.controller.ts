@@ -13,7 +13,7 @@ import { ApiBearerAuth, ApiParam, ApiResponse } from '@nestjs/swagger';
 import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { GetAnimalByIdCommand } from '../domain/query/find-by-id-animals.query';
-
+import { AuthJwtDto } from 'src/core/auth/domain/dto/auth-jwt.dto';
 import { AuthGuard } from 'src/core/guards/auth.guards';
 import { ReadAnimalDto } from '../domain/dtos/read-animals.dto';
 import { UpdateAnimalDto } from '../domain/dtos/update-animals.dto';
@@ -27,9 +27,10 @@ import { AnimalType } from 'src/entities/animals.enum';
 import { RaceAnimalsQuery } from '../domain/query/race-animals.query';
 import { BreedsListDto } from '../domain/dtos/breed-list.dto';
 import { GetAnimalBySlugCommand } from '../domain/query/find-by-slug-animals.query';
+import { User } from 'src/core/decorators/user.decorators';
 
-// @UseGuards(AuthGuard)
-// @ApiBearerAuth('jwt')
+@UseGuards(AuthGuard)
+@ApiBearerAuth('jwt')
 @ControllerApp('animals', 'Animals')
 export class EnterpriseController {
   constructor(
@@ -42,9 +43,12 @@ export class EnterpriseController {
     description: 'Creates an Animal',
     type: ReadAnimalDto,
   })
-  async create(@Body() enterpriseDto: CreateAnimalDto) {
+  async create(
+    @Body() enterpriseDto: CreateAnimalDto,
+    @User() user: AuthJwtDto,
+  ) {
     return await this.commandBus.execute(
-      new CreateAnimalsCommand(enterpriseDto),
+      new CreateAnimalsCommand(enterpriseDto, user),
     );
   }
 

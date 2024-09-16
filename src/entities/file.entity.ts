@@ -6,6 +6,7 @@ import {
   PrimaryGeneratedColumn,
 } from 'typeorm';
 import { AnimalsEntity } from './animals.entity';
+import { PageConfigEntity } from './page-config.entity';
 
 @Entity()
 export class FileEntity {
@@ -34,6 +35,20 @@ export class FileEntity {
   public blobName: string;
 
   @OneToOne(
+    () => PageConfigEntity,
+    (animal: PageConfigEntity) => animal.avatarImage,
+    { nullable: true },
+  )
+  public avatarImage: PageConfigEntity;
+
+  @OneToOne(
+    () => PageConfigEntity,
+    (animal: PageConfigEntity) => animal.backgroundImage,
+    { nullable: true },
+  )
+  public backgroundImage: PageConfigEntity;
+
+  @OneToOne(
     () => AnimalsEntity,
     (animal: AnimalsEntity) => animal.principalPicture,
     { nullable: true },
@@ -45,5 +60,5 @@ export class FileEntity {
     (animal: AnimalsEntity) => animal.imagesList,
     { nullable: true },
   )
-  public animalImageList: AnimalsEntity;
+  public animalImageList: AnimalsEntity[];
 }

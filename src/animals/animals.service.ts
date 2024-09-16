@@ -10,6 +10,7 @@ import { EnterpriseEntity } from 'src/entities/enterprise.entity';
 import { UserEntity } from 'src/entities/user.entity';
 import { FileEntity } from 'src/entities/file.entity';
 import { randomInt } from 'crypto';
+import { AuthJwtDto } from 'src/core/auth/domain/dto/auth-jwt.dto';
 
 @Injectable()
 export class AnimalsService {
@@ -29,13 +30,14 @@ export class AnimalsService {
 
   async createEnterprise(
     createAnimalsDto: CreateAnimalDto,
+    user: AuthJwtDto,
   ): Promise<AnimalsEntity> {
     try {
       const { company, receiver, imagesList, principalPictureUuid, ...data } =
         createAnimalsDto;
 
       const companyEntity = await this.enterpriseRepository.findOneBy({
-        id: company,
+        user: { id: user.id },
       });
       const receiverEntity = await this.userRepository.findOneBy({
         id: receiver,

@@ -11,9 +11,11 @@ export class CreateEnterpriseHandler
 
   async execute(command: CreateEnterpriseCommand) {
     try {
-      const { createEnterpriseDto } = command;
-      const enteprise =
-        await this.repository.createEnterprise(createEnterpriseDto);
+      const { createEnterpriseDto, user } = command;
+      const enteprise = await this.repository.createEnterprise(
+        createEnterpriseDto,
+        user,
+      );
 
       return enteprise;
     } catch (error) {

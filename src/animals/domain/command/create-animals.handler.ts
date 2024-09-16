@@ -12,9 +12,11 @@ export class CreateAnimalsHandler
 
   async execute(command: CreateAnimalsCommand) {
     try {
-      const { createAnimalsDto } = command;
-      const enteprise =
-        await this.repository.createEnterprise(createAnimalsDto);
+      const { createAnimalsDto, user } = command;
+      const enteprise = await this.repository.createEnterprise(
+        createAnimalsDto,
+        user,
+      );
 
       return enteprise;
     } catch (error) {

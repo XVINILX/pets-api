@@ -17,17 +17,33 @@ export class EnterpriseEntity {
   @PrimaryGeneratedColumn('uuid')
   id: string;
 
-  @Column()
+  @Column({ nullable: true })
   razaoSocial: string;
 
-  @Column()
+  @Column({ nullable: true })
+  description: string;
+
+  @Column({ nullable: true })
   nomeFantasia: string;
 
-  @Column()
+  @Column({ nullable: true })
   cnpj: string;
 
   @Column()
-  regional: string;
+  public city: string;
+  /*OK*/
+
+  @Column()
+  public state: string;
+
+  @Column()
+  public street: string;
+
+  @Column()
+  public zipCode: string;
+
+  @Column({ nullable: true })
+  public slug: string;
 
   @OneToMany(() => AnimalsEntity, (animal: AnimalsEntity) => animal.company)
   @JoinColumn()
@@ -40,17 +56,12 @@ export class EnterpriseEntity {
   @OneToOne(
     () => PageConfigEntity,
     (pageConfig: PageConfigEntity) => pageConfig.enterprise,
+    { nullable: true },
   )
   public pageConfig: PageConfigEntity;
 
-  @Column()
+  @Column({ nullable: true })
   openingDate: Date;
-
-  @Column({ type: Boolean, default: true })
-  activate: boolean;
-
-  @Column({ type: String, array: true })
-  especialidades: string[];
 
   @CreateDateColumn()
   createdAt: Date;

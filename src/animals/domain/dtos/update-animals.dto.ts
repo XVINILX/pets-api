@@ -42,6 +42,15 @@ export class UpdateAnimalDto {
   @IsOptional()
   state?: string;
 
+  @ApiProperty()
+  @IsString()
+  street: string;
+
+  @ApiProperty()
+  @IsString()
+  @IsOptional()
+  zipCode: string;
+
   @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()

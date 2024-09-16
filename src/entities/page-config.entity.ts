@@ -9,6 +9,7 @@ import {
 } from 'typeorm';
 
 import { EnterpriseEntity } from './enterprise.entity';
+import { FileEntity } from './file.entity';
 
 @Entity()
 export class PageConfigEntity {
@@ -27,14 +28,24 @@ export class PageConfigEntity {
   @Column()
   donationLink: string;
 
-  @Column()
-  backgroundImage: string;
+  @OneToOne(
+    () => FileEntity,
+    (image: FileEntity) => image.animalPrincipalImage,
+    {
+      nullable: true,
+    },
+  )
+  @JoinColumn()
+  backgroundImage: FileEntity;
 
   @Column()
   aboutMe: string;
 
-  @Column()
-  avatarImage: string;
+  @OneToOne(() => FileEntity, (image: FileEntity) => image.avatarImage, {
+    nullable: true,
+  })
+  @JoinColumn()
+  avatarImage?: FileEntity;
 
   @Column()
   colorInfo: string;

@@ -7,23 +7,27 @@ import {
 
 import { UserIdCheckMiddleware } from 'src/core/middleware/user-id-check.middleware';
 import { EnterpriseController } from './controller/pageConfig.controller';
-import { CreateEnterpriseHandler } from './domain/command/create-animals.handler';
+
 import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CqrsModule } from '@nestjs/cqrs';
-import { PatchEnterpriseHandler } from './domain/command/patch-animals.handler';
-import { DeleteEnterpriseHandler } from './domain/command/delete-animals.handler';
+
 import { GetEnterpriseByIdHandler } from './domain/query/find-by-id-enterprise.handler';
 import { ListEnterpriseHandler } from './domain/query/list-enterprise.handler';
 import { PaginationEnterpriseHandler } from './domain/query/pagination-enterprise.handler';
 import { AuthModule } from 'src/core/auth/auth.module';
 import { PageConfigService } from './pageConfig.service';
 import { PageConfigEntity } from 'src/entities/page-config.entity';
+import { CreatePageConfigHandler } from './domain/command/create-page-config.handler';
+import { DeletePageConfigHandler } from './domain/command/delete-page-config.handler';
+import { PatchPageConfigHandler } from './domain/command/patch-page-config.handler';
+import { FileEntity } from 'src/entities/file.entity';
+import { EnterpriseEntity } from 'src/entities/enterprise.entity';
 
 const CommandHandler = [
-  CreateEnterpriseHandler,
-  DeleteEnterpriseHandler,
-  PatchEnterpriseHandler,
+  CreatePageConfigHandler,
+  DeletePageConfigHandler,
+  PatchPageConfigHandler,
   ListEnterpriseHandler,
 ];
 
@@ -35,7 +39,7 @@ const QueryHandler = [
 
 @Module({
   imports: [
-    TypeOrmModule.forFeature([PageConfigEntity]),
+    TypeOrmModule.forFeature([PageConfigEntity, FileEntity, EnterpriseEntity]),
     CqrsModule,
     AuthModule,
   ],

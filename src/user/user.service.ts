@@ -147,7 +147,7 @@ export class UserService implements OnModuleInit {
 
   async deleteUser(id: string): Promise<boolean> {
     try {
-      const user = await this.userRepository.delete({ id: id });
+      await this.userRepository.delete({ id: id });
       const checkUser = await this.userRepository.exist({
         where: { id: id },
       });
