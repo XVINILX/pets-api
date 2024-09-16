@@ -62,11 +62,6 @@ export class CreateAnimalDto {
   @ApiProperty({ required: false })
   @IsUUID()
   @IsOptional()
-  company?: string;
-
-  @ApiProperty({ required: false })
-  @IsUUID()
-  @IsOptional()
   receiver?: string;
 
   @ApiProperty({ required: false })

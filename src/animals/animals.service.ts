@@ -33,7 +33,7 @@ export class AnimalsService {
     user: AuthJwtDto,
   ): Promise<AnimalsEntity> {
     try {
-      const { company, receiver, imagesList, principalPictureUuid, ...data } =
+      const { receiver, imagesList, principalPictureUuid, ...data } =
         createAnimalsDto;
 
       const companyEntity = await this.enterpriseRepository.findOneBy({
