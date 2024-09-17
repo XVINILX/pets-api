@@ -14,6 +14,7 @@ import { UserEntity } from './user.entity';
 import { FileEntity } from './file.entity';
 import { AnimalGenders, AnimalType } from './animals.enum';
 import { AnswerConfigEntity } from './answerConfig.entity';
+import { QuestionnairyConfigEntity } from './questionnairyConfig.entity';
 
 @Entity()
 export class AnimalsEntity {
@@ -67,9 +68,22 @@ export class AnimalsEntity {
   )
   public company: EnterpriseEntity;
 
-  @ManyToOne(() => UserEntity, (enterprise: UserEntity) => enterprise, {
-    nullable: true,
-  })
+  @ManyToOne(
+    () => QuestionnairyConfigEntity,
+    (questionnairy: QuestionnairyConfigEntity) => questionnairy.animals,
+    {
+      nullable: true,
+    },
+  )
+  public questionnairy: QuestionnairyConfigEntity;
+
+  @ManyToOne(
+    () => UserEntity,
+    (enterprise: UserEntity) => enterprise.donations,
+    {
+      nullable: true,
+    },
+  )
   public receiver: UserEntity;
 
   @OneToMany(

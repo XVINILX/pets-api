@@ -1,10 +1,12 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { AnimalsEntity } from './animals.entity';
 import { PageConfigEntity } from './page-config.entity';
@@ -63,4 +65,10 @@ export class FileEntity {
   )
   @JoinColumn()
   public animalImageList: AnimalsEntity;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

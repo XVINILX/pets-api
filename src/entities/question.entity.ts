@@ -1,11 +1,14 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { QuestionnairyConfigEntity } from './questionnairyConfig.entity';
+import { QuestionType } from 'src/questionConfig/domain/enums/questions.enum';
 
 @Entity()
 export class QuestionEntity {
@@ -15,8 +18,8 @@ export class QuestionEntity {
   @Column()
   public question: string;
 
-  @Column()
-  public type: string;
+  @Column({ enum: QuestionType })
+  public type: QuestionType;
 
   @Column({ type: 'int', nullable: true })
   public order?: number;
@@ -32,4 +35,10 @@ export class QuestionEntity {
   )
   @JoinColumn()
   public questionnairyConfig: QuestionnairyConfigEntity;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

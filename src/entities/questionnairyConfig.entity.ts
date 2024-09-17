@@ -1,14 +1,17 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   OneToMany,
   OneToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 
 import { QuestionEntity } from './question.entity';
 import { EnterpriseEntity } from './enterprise.entity';
+import { AnimalsEntity } from './animals.entity';
 
 @Entity()
 export class QuestionnairyConfigEntity {
@@ -25,6 +28,13 @@ export class QuestionnairyConfigEntity {
   )
   public questions: QuestionEntity[];
 
+  @OneToMany(
+    () => AnimalsEntity,
+    (animals: AnimalsEntity) => animals.questionnairy,
+    { nullable: true },
+  )
+  public animals: AnimalsEntity[];
+
   @OneToOne(
     () => EnterpriseEntity,
     (image: EnterpriseEntity) => image.questionnairyConfig,
@@ -34,4 +44,10 @@ export class QuestionnairyConfigEntity {
   )
   @JoinColumn()
   public enterprise: EnterpriseEntity;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

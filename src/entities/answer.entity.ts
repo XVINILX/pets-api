@@ -1,9 +1,11 @@
 import {
   Column,
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { AnswerConfigEntity } from './answerConfig.entity';
 
@@ -31,4 +33,10 @@ export class AnswerEntity {
   )
   @JoinColumn()
   public answerConfig: AnswerConfigEntity;
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }

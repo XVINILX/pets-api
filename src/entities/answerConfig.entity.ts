@@ -1,9 +1,11 @@
 import {
+  CreateDateColumn,
   Entity,
   JoinColumn,
   ManyToOne,
   OneToMany,
   PrimaryGeneratedColumn,
+  UpdateDateColumn,
 } from 'typeorm';
 import { AnswerEntity } from './answer.entity';
 import { AnimalsEntity } from './animals.entity';
@@ -25,4 +27,10 @@ export class AnswerConfigEntity {
     { nullable: true },
   )
   public answers: AnswerEntity[];
+
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @UpdateDateColumn()
+  updatedAt: Date;
 }
