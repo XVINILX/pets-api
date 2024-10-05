@@ -166,6 +166,41 @@ export class AnimalsService {
     }
   }
 
+  /**
+   * @param search string - Search by nome fantasia
+   * @param items number - Quantity of items in that page
+   * @param page number - Quantity of pages
+   */
+  async authListAnimalSearch(
+    search: string,
+    userQuery: AuthJwtDto,
+    items?: number,
+    page?: number,
+  ) {
+    try {
+      const skip = (page - 1) * items;
+      const take = items;
+
+      const [animalList, total] = await this.animalRepository.findAndCount({
+        where: {
+          name: ILike(`%${search}%`),
+          company: { user: { id: userQuery.id } },
+        },
+
+        relations: ['imagesList'],
+        skip: Number(skip),
+        take: Number(take),
+      });
+
+      return {
+        data: animalList,
+        total,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   async findAnimalBySlug(slug: string) {
     try {
       const enterprise = await this.animalRepository.findOne({
@@ -178,13 +213,26 @@ export class AnimalsService {
     }
   }
 
-  async findEnterprise(id: string) {
+  async findAnimal(id: string) {
     try {
       const enterprise = await this.animalRepository.findOne({
         where: { id },
       });
 
       return enterprise ? enterprise : null;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async authFindAnimal(id: string, user: AuthJwtDto) {
+    try {
+      const animal = await this.animalRepository.findOne({
+        where: { id, company: { user: { id: user.id } } },
+        relations: ['answers'],
+      });
+
+      return animal ? animal : null;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

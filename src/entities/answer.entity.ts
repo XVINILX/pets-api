@@ -9,6 +9,8 @@ import {
 } from 'typeorm';
 import { AnswerConfigEntity } from './answerConfig.entity';
 
+import { QuestionType } from 'src/questionConfig/domain/enums/questions.enum';
+
 @Entity()
 export class AnswerEntity {
   @PrimaryGeneratedColumn('uuid')
@@ -19,6 +21,9 @@ export class AnswerEntity {
 
   @Column({ type: 'int', nullable: true })
   public step?: number;
+
+  @Column({ enum: QuestionType })
+  public type: QuestionType;
 
   @Column()
   public question: string;

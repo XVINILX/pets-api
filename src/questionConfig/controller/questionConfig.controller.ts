@@ -16,6 +16,7 @@ import { CreateQuestionDto } from '../domain/dtos/create-question.dto';
 import { CreateQuestionConfigCommand } from '../domain/command/create-question-config.command';
 import { PaginationPageConfigQuery } from '../domain/query/pagination-questionConfig.query';
 import { ListQuestionnairyConfigDto } from '../domain/dtos/create-questionnairy.dto';
+import { SelectPageConfigQuery } from '../domain/query/select-questionConfig.query';
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth('jwt')
@@ -39,7 +40,7 @@ export class QuestionConfigController {
       new CreateQuestionCommand(enterpriseDto, user),
     );
   }
-
+  //TODO list of question according to the user company
   @Get('items=:items/page=:page/search=:search')
   @ApiResponse({
     description: 'Searchs an Enterprise By Id',
@@ -49,10 +50,20 @@ export class QuestionConfigController {
     @Param('page') page: number,
     @Param('items') items: number,
     @Param('search') search: string,
+    @User() user: AuthJwtDto,
   ) {
     return this.queryBus.execute(
       new PaginationPageConfigQuery(search, page, items),
     );
+  }
+
+  @Get('select')
+  @ApiResponse({
+    description: 'Searchs question configs available',
+    type: ListQuestionnairyConfigDto,
+  })
+  async selectQuestionsList(@User() user: AuthJwtDto) {
+    return this.queryBus.execute(new SelectPageConfigQuery(user));
   }
 
   @Post('/')

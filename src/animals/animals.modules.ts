@@ -25,6 +25,8 @@ import { FileEntity } from 'src/entities/file.entity';
 import { RaceAnimalsHandler } from './domain/query/race-animals.handler';
 import { GetAnimalBySlugHandler } from './domain/query/find-by-slug-animals.handler';
 import { AnswerConfigEntity } from 'src/entities/answerConfig.entity';
+import { AuthGetAnimalByIdHandler } from './domain/query/auth-find-by-id-animals.handler';
+import { AuthPaginationAnimalsHandler } from './domain/query/auth-pagination-animals.handler';
 
 const CommandHandler = [
   CreateAnimalsHandler,
@@ -38,6 +40,8 @@ const QueryHandler = [
   PaginationAnimalsHandler,
   GetAnimalBySlugHandler,
   RaceAnimalsHandler,
+  AuthGetAnimalByIdHandler,
+  AuthPaginationAnimalsHandler,
 ];
 
 @Module({

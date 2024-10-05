@@ -13,7 +13,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 import { CqrsModule } from '@nestjs/cqrs';
 
 import { DeleteEnterpriseHandler } from './domain/command/delete-animals.handler';
-import { GetAnimalByIdHandler } from './domain/query/find-by-id-animals.handler';
 
 import { AuthModule } from 'src/core/auth/auth.module';
 import { AnimalsEntity } from 'src/entities/animals.entity';
@@ -24,10 +23,11 @@ import { FileEntity } from 'src/entities/file.entity';
 
 import { AnswerConfigEntity } from 'src/entities/answerConfig.entity';
 import { AnswerEntity } from 'src/entities/answer.entity';
+import { GetAnswerConfigByIdHandler } from './domain/query/find-by-id-answerConfig.handler';
 
 const CommandHandler = [CreateAnswersHandler, DeleteEnterpriseHandler];
 
-const QueryHandler = [GetAnimalByIdHandler];
+const QueryHandler = [GetAnswerConfigByIdHandler];
 
 @Module({
   imports: [

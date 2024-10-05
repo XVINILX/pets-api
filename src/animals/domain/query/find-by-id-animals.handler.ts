@@ -13,7 +13,7 @@ export class GetAnimalByIdHandler
     try {
       const { id } = command;
 
-      const enteprise = await this.repository.findEnterprise(id);
+      const enteprise = await this.repository.findAnimal(id);
 
       return enteprise;
     } catch (error) {

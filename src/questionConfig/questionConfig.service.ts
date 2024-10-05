@@ -144,6 +144,25 @@ export class QuestionConfigService {
     }
   }
 
+  async selectPageConfig(user: AuthJwtDto) {
+    try {
+      const [enterpriseList, total] =
+        await this.questionnairyConfigRepository.find({
+          where: {
+            enterprise: { user: user },
+          },
+          select: { id: true, questions: true },
+        });
+
+      return {
+        data: enterpriseList,
+        total,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   async findAnimalBySlug(slug: string) {
     try {
       const enterprise = await this.animalRepository.findOne({

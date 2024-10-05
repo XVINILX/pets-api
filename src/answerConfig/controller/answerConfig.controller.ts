@@ -1,4 +1,4 @@
-import { Body, Delete, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
 
 import { ControllerApp } from 'src/core/decorators/controller-apitag.decorators';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
@@ -15,6 +15,7 @@ import { CreateAnswerCommand } from '../domain/command/create-answer.command';
 import { CreateAnswerConfigCommand } from '../domain/command/create-answer-config.command';
 import { CreateAnswerConfigDto } from '../domain/dtos/create-answer-config.dto';
 import { ReadAnimalDto } from 'src/animals/domain/dtos/read-animals.dto';
+import { GetAnsweConfigByIdCommand } from '../domain/query/find-by-id-answerConfig.query';
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth('jwt')
@@ -51,6 +52,15 @@ export class AnswerConfigController {
     return await this.commandBus.execute(
       new CreateAnswerConfigCommand(enterpriseDto, user),
     );
+  }
+
+  @Get('/id=:id')
+  @ApiResponse({
+    description: 'Searchs an answerConfig By Id',
+    type: ReadAnimalDto,
+  })
+  async findById(@Param('id') id: string) {
+    return this.queryBus.execute(new GetAnsweConfigByIdCommand(id));
   }
 
   @ApiResponse({

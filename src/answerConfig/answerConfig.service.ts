@@ -148,10 +148,11 @@ export class AnswerConfigService {
     }
   }
 
-  async findEnterprise(id: string) {
+  async findAnswerConfig(id: string) {
     try {
-      const enterprise = await this.animalRepository.findOne({
+      const enterprise = await this.answerConfigRepository.findOne({
         where: { id },
+        relations: ['answers'],
       });
 
       return enterprise ? enterprise : null;

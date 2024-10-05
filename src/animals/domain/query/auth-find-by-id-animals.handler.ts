@@ -1,19 +1,20 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { GetAnimalByIdCommand } from './find-by-id-animals.query';
-import { AnimalsService } from 'src/animals/animals.service';
 
-@QueryHandler(GetAnimalByIdCommand)
-export class GetAnimalByIdHandler
-  implements IQueryHandler<GetAnimalByIdCommand>
+import { AnimalsService } from 'src/animals/animals.service';
+import { AuthGetAnimalByIdQuery } from './auth-by-id-animals.query';
+
+@QueryHandler(AuthGetAnimalByIdQuery)
+export class AuthGetAnimalByIdHandler
+  implements IQueryHandler<AuthGetAnimalByIdQuery>
 {
   constructor(private repository: AnimalsService) {}
 
-  async execute(command: GetAnimalByIdCommand) {
+  async execute(command: AuthGetAnimalByIdQuery) {
     try {
-      const { id } = command;
+      const { id, user } = command;
 
-      const enteprise = await this.repository.findEnterprise(id);
+      const enteprise = await this.repository.authFindAnimal(id, user);
 
       return enteprise;
     } catch (error) {

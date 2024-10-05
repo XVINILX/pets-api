@@ -29,6 +29,8 @@ import { RaceAnimalsQuery } from '../domain/query/race-animals.query';
 import { BreedsListDto } from '../domain/dtos/breed-list.dto';
 import { GetAnimalBySlugCommand } from '../domain/query/find-by-slug-animals.query';
 import { User } from 'src/core/decorators/user.decorators';
+import { AuthGetAnimalByIdQuery } from '../domain/query/auth-by-id-animals.query';
+import { AuthPaginationAnimalsQuery } from '../domain/query/auth-pagination-animals.query';
 
 @ControllerApp('animals', 'Animals')
 export class EnterpriseController {
@@ -62,6 +64,17 @@ export class EnterpriseController {
     return this.queryBus.execute(new GetAnimalByIdCommand(id));
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('jwt')
+  @Get('/auth/id=:id')
+  @ApiResponse({
+    description: 'Searchs an Enterprise By Id',
+    type: ReadAnimalDto,
+  })
+  async authFindById(@Param('id') id: string, @User() user: AuthJwtDto) {
+    return this.queryBus.execute(new AuthGetAnimalByIdQuery(id, user));
+  }
+
   @Get('/slug=:slug')
   @ApiResponse({
     description: 'Searchs an Enterprise By Id',
@@ -93,6 +106,24 @@ export class EnterpriseController {
   ) {
     return this.queryBus.execute(
       new PaginationAnimalsQuery(search, page, items),
+    );
+  }
+
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('jwt')
+  @Get('list/auth')
+  @ApiResponse({
+    description: 'Searchs an Enterprise By Id',
+    type: ListAnimalsDto,
+  })
+  async ListWithPaginationAuth(
+    @Query('search') search: string,
+    @Query('page') page: number,
+    @Query('items') items: number,
+    @User() user: AuthJwtDto,
+  ) {
+    return this.queryBus.execute(
+      new AuthPaginationAnimalsQuery(search, page, items, user),
     );
   }
 
