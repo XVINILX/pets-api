@@ -130,7 +130,7 @@ export class UserService implements OnModuleInit {
   async findUserByEmail(email: string) {
     try {
       const user = await this.userRepository.findOne({
-        where: { email: email },
+        where: { email },
       });
 
       return user ? user : null;

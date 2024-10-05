@@ -13,7 +13,7 @@ export class ListAnimalsHandler implements IQueryHandler<ListAnimalsQuery> {
     try {
       const { search } = command;
 
-      const enteprise = await this.repository.listEnterprise(search);
+      const enteprise = await this.repository.listAnimalSearch(search);
 
       return enteprise;
     } catch (error) {

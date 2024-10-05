@@ -38,7 +38,18 @@ export class AuthController {
   @UseGuards(GoogleOAuthGuard)
   async googleAuthRedirect(@Request() req: any, @Res() response: any) {
     const authentication = await this.authService.googleLogin(req);
+    //TODO only makes the redirect if already has an account and it has verified (?)
+    response.redirect(
+      `${process.env.FRONTEND_URL}/google?accessToken=${authentication.accessToken}`,
+    );
+  }
 
+  @Get('google-redirect')
+  @UseGuards(GoogleOAuthGuard)
+  async googleRegisterInitially(@Request() req: any, @Res() response: any) {
+    const authentication = await this.authService.googleLogin(req);
+    //TODO initially creates an user
+    //redirect to another page
     response.redirect(
       `${process.env.FRONTEND_URL}/google?accessToken=${authentication.accessToken}`,
     );

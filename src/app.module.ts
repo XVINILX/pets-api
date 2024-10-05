@@ -47,20 +47,10 @@ import { QuestionnairyConfigEntity } from './entities/questionnairyConfig.entity
         QuestionnairyConfigEntity,
       ],
       synchronize: true,
-      ssl: {
-        rejectUnauthorized: false,
-      },
+      extra: { ssl: { rejectUnauthorized: false } },
+      ssl: true,
     }),
-    // TypeOrmModule.forRoot({
-    //   type: 'mongodb',
-    //   host: process.env.MONGO_HOST,
-    //   port: parseInt(process.env.MONGO_PORT),
-    //   database: process.env.MONGO_DB,
-    //   useNewUrlParser: true,
-    //   useUnifiedTopology: true,
-    //   entities: [FileEntity],
-    //   synchronize: true,
-    // }),
+
     FilesModule,
     UserModule,
   ],

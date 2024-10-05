@@ -1,4 +1,4 @@
-import { Body, Delete, Get, Param, Post, UseGuards } from '@nestjs/common';
+import { Body, Delete, Param, Post, UseGuards } from '@nestjs/common';
 
 import { ControllerApp } from 'src/core/decorators/controller-apitag.decorators';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
@@ -6,10 +6,6 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 
 import { AuthJwtDto } from 'src/core/auth/domain/dto/auth-jwt.dto';
 import { AuthGuard } from 'src/core/guards/auth.guards';
-import { ReadAnimalDto } from '../domain/dtos/read-animals.dto';
-
-import { ListAnimalsDto } from '../domain/dtos/list-animals.dto';
-import { PaginationAnimalsQuery } from '../domain/query/pagination-animals.query';
 
 import { DeleteAnimalsCommand } from '../domain/command/delete-animals.command';
 
@@ -18,6 +14,7 @@ import { CreateAnswerDto } from '../domain/dtos/create-answer.dto';
 import { CreateAnswerCommand } from '../domain/command/create-answer.command';
 import { CreateAnswerConfigCommand } from '../domain/command/create-answer-config.command';
 import { CreateAnswerConfigDto } from '../domain/dtos/create-answer-config.dto';
+import { ReadAnimalDto } from 'src/animals/domain/dtos/read-animals.dto';
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth('jwt')
@@ -53,21 +50,6 @@ export class AnswerConfigController {
   ) {
     return await this.commandBus.execute(
       new CreateAnswerConfigCommand(enterpriseDto, user),
-    );
-  }
-
-  @Get('items=:items/page=:page/search=:search')
-  @ApiResponse({
-    description: 'Searchs an Enterprise By Id',
-    type: ListAnimalsDto,
-  })
-  async ListWithPagination(
-    @Param('search') search: string,
-    @Param('page') page: number,
-    @Param('items') items: number,
-  ) {
-    return this.queryBus.execute(
-      new PaginationAnimalsQuery(search, page, items),
     );
   }
 

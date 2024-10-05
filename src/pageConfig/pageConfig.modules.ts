@@ -12,8 +12,6 @@ import { TypeOrmModule } from '@nestjs/typeorm';
 
 import { CqrsModule } from '@nestjs/cqrs';
 
-import { GetEnterpriseByIdHandler } from './domain/query/find-by-id-enterprise.handler';
-import { ListEnterpriseHandler } from './domain/query/list-enterprise.handler';
 import { PaginationEnterpriseHandler } from './domain/query/pagination-enterprise.handler';
 import { AuthModule } from 'src/core/auth/auth.module';
 import { PageConfigService } from './pageConfig.service';
@@ -28,14 +26,9 @@ const CommandHandler = [
   CreatePageConfigHandler,
   DeletePageConfigHandler,
   PatchPageConfigHandler,
-  ListEnterpriseHandler,
 ];
 
-const QueryHandler = [
-  GetEnterpriseByIdHandler,
-  ListEnterpriseHandler,
-  PaginationEnterpriseHandler,
-];
+const QueryHandler = [PaginationEnterpriseHandler];
 
 @Module({
   imports: [

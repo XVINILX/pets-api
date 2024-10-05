@@ -34,3 +34,10 @@ export class UpdateQuestionnairyConfigDto {
   @IsOptional()
   public enterpriseId?: string;
 }
+
+export class ReadQuestionnairyConfigDto {}
+
+export class ListQuestionnairyConfigDto {
+  data: ReadQuestionnairyConfigDto[];
+  total: number;
+}

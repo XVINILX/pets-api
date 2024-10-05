@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 
@@ -29,8 +30,6 @@ import { BreedsListDto } from '../domain/dtos/breed-list.dto';
 import { GetAnimalBySlugCommand } from '../domain/query/find-by-slug-animals.query';
 import { User } from 'src/core/decorators/user.decorators';
 
-@UseGuards(AuthGuard)
-@ApiBearerAuth('jwt')
 @ControllerApp('animals', 'Animals')
 export class EnterpriseController {
   constructor(
@@ -38,6 +37,8 @@ export class EnterpriseController {
     private readonly queryBus: QueryBus,
   ) {}
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('jwt')
   @Post()
   @ApiResponse({
     description: 'Creates an Animal',
@@ -80,21 +81,23 @@ export class EnterpriseController {
     return this.queryBus.execute(new RaceAnimalsQuery(type));
   }
 
-  @Get('items=:items/page=:page/search=:search')
+  @Get('list')
   @ApiResponse({
     description: 'Searchs an Enterprise By Id',
     type: ListAnimalsDto,
   })
   async ListWithPagination(
-    @Param('search') search: string,
-    @Param('page') page: number,
-    @Param('items') items: number,
+    @Query('search') search: string,
+    @Query('page') page: number,
+    @Query('items') items: number,
   ) {
     return this.queryBus.execute(
       new PaginationAnimalsQuery(search, page, items),
     );
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('jwt')
   @Patch(':id/')
   @ApiResponse({
     description: 'Update an Enterprise',
@@ -109,6 +112,8 @@ export class EnterpriseController {
     );
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('jwt')
   @ApiResponse({
     description: 'Delete an Enterprise',
     type: ReadAnimalDto,

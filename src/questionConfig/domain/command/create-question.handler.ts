@@ -3,8 +3,7 @@ import { CommandHandler, ICommandHandler } from '@nestjs/cqrs';
 import { HttpException, HttpStatus } from '@nestjs/common';
 
 import { CreateQuestionCommand } from './create-question.command';
-
-import { QuestionConfigService } from 'src/questionConfig/questionConfig.service';
+import { QuestionConfigService } from '../../questionConfig.service';
 
 @CommandHandler(CreateQuestionCommand)
 export class CreateAnswersHandler

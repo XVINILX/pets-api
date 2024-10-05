@@ -1,16 +1,15 @@
 import { IQueryHandler, QueryHandler } from '@nestjs/cqrs';
 import { HttpException, HttpStatus } from '@nestjs/common';
-import { PaginationEnterpriseQuery } from './pagination-enterprise.query';
+import { PaginationPageConfigQuery } from './pagination-questionConfig.query';
+import { QuestionConfigService } from 'src/questionConfig/questionConfig.service';
 
-import { PageConfigService } from 'src/pageConfig/pageConfig.service';
-
-@QueryHandler(PaginationEnterpriseQuery)
-export class PaginationEnterpriseHandler
-  implements IQueryHandler<PaginationEnterpriseQuery>
+@QueryHandler(PaginationPageConfigQuery)
+export class PaginationAnimalsHandler
+  implements IQueryHandler<PaginationPageConfigQuery>
 {
-  constructor(private repository: PageConfigService) {}
+  constructor(private repository: QuestionConfigService) {}
 
-  async execute(command: PaginationEnterpriseQuery) {
+  async execute(command: PaginationPageConfigQuery) {
     try {
       const { search, items, page } = command;
       const enteprise = await this.repository.listPageConfig(

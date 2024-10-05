@@ -143,26 +143,24 @@ export class AnimalsService {
    * @param items number - Quantity of items in that page
    * @param page number - Quantity of pages
    */
-
-  async listEnterprise(search: string, items?: number, page?: number) {
+  async listAnimalSearch(search: string, items?: number, page?: number) {
     try {
-      const enterpriseList = await this.animalRepository.findAndCountBy({
-        name: ILike(`%${search}%`),
+      const skip = (page - 1) * items;
+      const take = items;
+
+      const [animalList, total] = await this.animalRepository.findAndCount({
+        where: {
+          name: ILike(`%${search}%`),
+        },
+        relations: ['imagesList'],
+        skip: Number(skip),
+        take: Number(take),
       });
 
-      if (items && page) {
-        const initialSlice = items * page;
-        const finalSlice = items * page + items;
-
-        const paginatedEnterpriseList = enterpriseList[0].slice(
-          initialSlice,
-          finalSlice,
-        );
-
-        return paginatedEnterpriseList ? paginatedEnterpriseList : [];
-      }
-
-      return enterpriseList ? enterpriseList : [];
+      return {
+        data: animalList,
+        total,
+      };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

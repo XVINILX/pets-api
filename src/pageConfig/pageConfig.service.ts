@@ -110,25 +110,24 @@ export class PageConfigService {
    * @param page number - Quantity of pages
    */
 
-  async listEnterprise(search: string, items?: number, page?: number) {
+  async listPageConfig(search: string, items?: number, page?: number) {
     try {
-      const enterpriseList = await this.pageConfigRepository.findAndCountBy({
-        backgroundImage: ILike(`%${search}%`),
-      });
+      const skip = (page - 1) * items;
+      const take = items;
 
-      if (items && page) {
-        const initialSlice = items * page;
-        const finalSlice = items * page + items;
+      const [pageConfigList, total] =
+        await this.pageConfigRepository.findAndCount({
+          where: {
+            aboutMe: ILike(`%${search}%`),
+          },
+          skip: skip,
+          take: take,
+        });
 
-        const paginatedEnterpriseList = enterpriseList[0].slice(
-          initialSlice,
-          finalSlice,
-        );
-
-        return paginatedEnterpriseList ? paginatedEnterpriseList : [];
-      }
-
-      return enterpriseList ? enterpriseList : [];
+      return {
+        data: pageConfigList,
+        total,
+      };
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

@@ -12,11 +12,13 @@ export class PaginationAnimalsHandler
   async execute(command: PaginationAnimalsQuery) {
     try {
       const { search, items, page } = command;
-      const enteprise = await this.repository.listEnterprise(
+      const enteprise = await this.repository.listAnimalSearch(
         search,
         items,
         page,
       );
+
+      //TODO return the links url
 
       return enteprise;
     } catch (error) {

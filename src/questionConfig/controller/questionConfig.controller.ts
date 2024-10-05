@@ -1,4 +1,4 @@
-import { Body, Post, UseGuards } from '@nestjs/common';
+import { Body, Get, Param, Post, UseGuards } from '@nestjs/common';
 
 import { ControllerApp } from 'src/core/decorators/controller-apitag.decorators';
 import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
@@ -12,8 +12,10 @@ import { CreateAnswerDto } from '../domain/dtos/create-answer.dto';
 
 import { CreateAnswerConfigDto } from '../domain/dtos/create-answer-config.dto';
 import { CreateQuestionCommand } from '../domain/command/create-question.command';
-import { CreateQuestionDto } from 'src/answerConfig/domain/dtos/create-question.dto';
+import { CreateQuestionDto } from '../domain/dtos/create-question.dto';
 import { CreateQuestionConfigCommand } from '../domain/command/create-question-config.command';
+import { PaginationPageConfigQuery } from '../domain/query/pagination-questionConfig.query';
+import { ListQuestionnairyConfigDto } from '../domain/dtos/create-questionnairy.dto';
 
 @UseGuards(AuthGuard)
 @ApiBearerAuth('jwt')
@@ -35,6 +37,21 @@ export class QuestionConfigController {
   ) {
     return await this.commandBus.execute(
       new CreateQuestionCommand(enterpriseDto, user),
+    );
+  }
+
+  @Get('items=:items/page=:page/search=:search')
+  @ApiResponse({
+    description: 'Searchs an Enterprise By Id',
+    type: ListQuestionnairyConfigDto,
+  })
+  async ListWithPaginationSearch(
+    @Param('page') page: number,
+    @Param('items') items: number,
+    @Param('search') search: string,
+  ) {
+    return this.queryBus.execute(
+      new PaginationPageConfigQuery(search, page, items),
     );
   }
 

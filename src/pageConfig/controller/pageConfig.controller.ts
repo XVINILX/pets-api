@@ -5,6 +5,7 @@ import {
   Param,
   Patch,
   Post,
+  Query,
   UseGuards,
 } from '@nestjs/common';
 
@@ -14,7 +15,7 @@ import { CommandBus, QueryBus } from '@nestjs/cqrs';
 import { CreatePageConfigDto } from '../domain/dtos/create-page-config.dto';
 
 import { DeleteEnterpriseDto } from '../domain/dtos/delete-page-config.dto';
-import { GetEnterpriseByIdQuery } from '../domain/query/find-by-id-enterprise.query';
+
 import { ListEnterpriseDto } from '../domain/dtos/list-page-config.dto';
 import { PaginationEnterpriseQuery } from '../domain/query/pagination-enterprise.query';
 import { AuthGuard } from 'src/core/guards/auth.guards';
@@ -47,15 +48,6 @@ export class EnterpriseController {
     return await this.commandBus.execute(
       new CreatePageConfigCommand(enterpriseDto, user),
     );
-  }
-
-  @Get('/id=:id')
-  @ApiResponse({
-    description: 'Searchs an Enterprise By Id',
-    type: ReadPageConfigDto,
-  })
-  async findById(@Param('id') id: string) {
-    return this.queryBus.execute(new GetEnterpriseByIdQuery(id));
   }
 
   @Get('items=:items/page=:page/search=:search')
