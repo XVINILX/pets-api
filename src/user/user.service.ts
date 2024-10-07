@@ -11,6 +11,7 @@ import { UpdateUserDto } from './domain/dtos/update-user.dto';
 import { UserEntity } from 'src/entities/user.entity';
 import { CreateUserDto } from './domain/dtos/create-user.dto';
 import * as bcrypt from 'bcrypt';
+import { randomBytes } from 'crypto';
 @Injectable()
 export class UserService implements OnModuleInit {
   constructor(
@@ -52,6 +53,38 @@ export class UserService implements OnModuleInit {
       createUser.password = newPassword;
 
       const user = this.userRepository.create(createUser);
+
+      return this.userRepository.save(user);
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async sendRecoverPasswordEmail(email: string): Promise<UserEntity> {
+    try {
+      const user = await this.userRepository.findOne({ where: { email } });
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+      }
+
+      const recoverToken = randomBytes(32).toString('hex');
+
+      const userPatch = await this.userRepository.update(user.id, {
+        recoverToken,
+      });
+
+      const mail = {
+        to: user.email,
+        from: 'noreply@application.com',
+        subject: 'Recuperação de senha',
+        template: 'recover-password',
+        context: {
+          token: recoverToken,
+        },
+      };
+
+      await this.mailerService.sendMail(mail);
 
       return this.userRepository.save(user);
     } catch (error) {

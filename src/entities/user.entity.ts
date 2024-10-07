@@ -33,6 +33,9 @@ export class UserEntity {
   @Column()
   password: string;
 
+  @Column()
+  recoverToken: string;
+
   @OneToOne(
     () => EnterpriseEntity,
     (enterprise: EnterpriseEntity) => enterprise.user,

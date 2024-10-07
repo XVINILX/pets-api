@@ -83,29 +83,6 @@ export class AnswerConfigService {
     }
   }
 
-  async updateAnswerConfig(
-    patchEnterprise: UpdateAnswerDto,
-    id: string,
-  ): Promise<AnimalsEntity> {
-    try {
-      const { answerConfigId, ...data } = patchEnterprise;
-
-      const answerConfigEntity = await this.answerRepository.findOneBy({
-        id: answerConfigId,
-      });
-
-      const animal = this.answerRepository.create({
-        answerConfig: answerConfigEntity,
-        ...data,
-      });
-
-      await this.animalRepository.update(id, animal);
-
-      return await this.animalRepository.findOneByOrFail({ id: id });
-    } catch (error) {
-      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
-    }
-  }
   /**
    * @param search string - Search by nome fantasia
    * @param items number - Quantity of items in that page

@@ -108,7 +108,7 @@ export class AuthService {
     }
   }
 
-  async resetPassword(updateAuthDto: AuthResetDto) {
+  async resetPassword(token: string, updateAuthDto: AuthResetDto) {
     try {
       const newUser = await this.userService.patchUser(
         { ...updateAuthDto },
