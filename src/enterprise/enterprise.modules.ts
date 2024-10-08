@@ -19,6 +19,7 @@ import { ListEnterpriseHandler } from './domain/query/list-enterprise.handler';
 import { PaginationEnterpriseHandler } from './domain/query/pagination-enterprise.handler';
 import { AuthModule } from 'src/core/auth/auth.module';
 import { UserEntity } from 'src/entities/user.entity';
+import { GetEnterpriseBySlugHandler } from './domain/query/find-by-slug-enterprise.handler';
 
 const CommandHandler = [
   CreateEnterpriseHandler,
@@ -31,6 +32,7 @@ const QueryHandler = [
   GetEnterpriseByIdHandler,
   ListEnterpriseHandler,
   PaginationEnterpriseHandler,
+  GetEnterpriseBySlugHandler,
 ];
 
 @Module({

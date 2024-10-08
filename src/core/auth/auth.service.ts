@@ -8,11 +8,14 @@ import { HttpException, HttpStatus, Injectable } from '@nestjs/common';
 import * as bcrypt from 'bcrypt';
 import { AuthAuthenticateDTO } from './domain/dto/auth-authenticate.dto';
 import { AuthResetDto } from './domain/dto/auth-reset.dto';
+import { MailerService } from '@nestjs-modules/mailer';
+import { UserEntity } from 'src/entities/user.entity';
 @Injectable()
 export class AuthService {
   constructor(
     private readonly jwtService: JwtService,
     private readonly userService: UserService,
+    private mailerService: MailerService,
   ) {}
 
   async createToken(email: string, id: string) {
@@ -110,9 +113,20 @@ export class AuthService {
 
   async resetPassword(token: string, updateAuthDto: AuthResetDto) {
     try {
+      const userByToken = await this.userService.findUserByToken(token);
+
+      if (!userByToken) return;
+
+      if (updateAuthDto.confirmationPassword !== updateAuthDto.password) return;
+
+      const newPassword = await bcrypt.hash(
+        updateAuthDto.confirmationPassword,
+        await bcrypt.genSalt(),
+      );
+
       const newUser = await this.userService.patchUser(
-        { ...updateAuthDto },
-        updateAuthDto.id,
+        { password: newPassword },
+        userByToken.id,
       );
 
       const authToken = await this.createToken(newUser.email, newUser.id);
@@ -121,6 +135,39 @@ export class AuthService {
         email: newUser.email,
         accessToken: authToken.access_token,
       };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  async sendRecoverPasswordEmail(email: string): Promise<UserEntity> {
+    try {
+      const user = await this.userService.findUserByEmail(email);
+
+      if (!user) {
+        throw new HttpException('User not found', HttpStatus.BAD_REQUEST);
+      }
+
+      const recoverToken = await this.createToken(user.email, user.id);
+
+      await this.userService.patchUser(
+        { recoverToken: recoverToken.access_token },
+        user.id,
+      );
+
+      const mail = {
+        to: user.email,
+        from: 'umlaramigo@gmail.com',
+        subject: 'Recuperação de senha',
+        template: 'reset-password',
+        context: {
+          token: recoverToken,
+        },
+      };
+
+      await this.mailerService.sendMail(mail);
+
+      return user;
     } catch (error) {
       throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
     }

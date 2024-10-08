@@ -8,6 +8,11 @@ export class UpdateUserDto {
   email?: string;
 
   @ApiProperty()
+  @IsOptional()
+  @IsEmail()
+  recoverToken?: string;
+
+  @ApiProperty()
   @IsString()
   password?: string;
 }

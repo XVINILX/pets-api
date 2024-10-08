@@ -33,7 +33,7 @@ export class UserEntity {
   @Column()
   password: string;
 
-  @Column()
+  @Column({ nullable: true })
   recoverToken: string;
 
   @OneToOne(

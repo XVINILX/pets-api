@@ -13,7 +13,10 @@ export class ResetUserHandler implements ICommandHandler<ResetUserCommand> {
     try {
       const { authResetDto } = command;
 
-      const user = await this.authService.resetPassword(authResetDto);
+      const user = await this.authService.resetPassword(
+        authResetDto.token,
+        authResetDto,
+      );
 
       return <AuthAuthenticateDTO>{
         email: user.email,

@@ -1,7 +1,13 @@
 import { ApiProperty } from '@nestjs/swagger';
-import { IsStrongPassword, IsUUID } from 'class-validator';
+import { IsStrongPassword } from 'class-validator';
 
 export class AuthResetDto {
+
+    @ApiProperty({ type: String, description: 'User Token for reset password' })
+
+  token: string;
+
+
   @ApiProperty({ type: String, description: 'User password' })
   @IsStrongPassword({
     minLength: 8,
@@ -11,7 +17,12 @@ export class AuthResetDto {
   })
   password: string;
 
-  @ApiProperty()
-  @IsUUID()
-  id: string;
+  @ApiProperty({ type: String, description: 'User password' })
+  @IsStrongPassword({
+    minLength: 8,
+    minNumbers: 1,
+    minSymbols: 1,
+    minUppercase: 1,
+  })
+  confirmationPassword: string;
 }

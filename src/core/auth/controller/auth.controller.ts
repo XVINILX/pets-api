@@ -4,7 +4,6 @@ import {
   Post,
   UseGuards,
   Request,
-  Response,
   Res,
   ValidationPipe,
   Param,
@@ -22,8 +21,10 @@ import { AuthService } from '../auth.service';
 import { User } from 'src/core/decorators/user.decorators';
 import { AuthJwtDto } from 'src/core/auth/domain/dto/auth-jwt.dto';
 import { AuthGuard } from 'src/core/guards/auth.guards';
-import { ApiBearerAuth, ApiResponse } from '@nestjs/swagger';
+import { ApiBearerAuth, ApiBody, ApiParam } from '@nestjs/swagger';
 import { UserService } from 'src/user/user.service';
+import { AuthResetDto } from '../domain/dto/auth-reset.dto';
+import { ResetUserCommand } from '../domain/commands/reset-user.command';
 
 @ControllerApp('auth', 'Auth')
 export class AuthController {
@@ -39,24 +40,18 @@ export class AuthController {
     return await this.commandBus.execute(new LoginUserCommand(authLoginDto));
   }
 
-  //TODO criar endpoint de recupreação de senha
-  // https://medium.com/@iago.maiasilva/construindo-uma-api-com-nestjs-postgresql-e-docker-parte-5-enviando-emails-de-confirma%C3%A7%C3%A3o-e-54cb977c3fad
-
-  @Patch('/reset-password/:token')
+  @Patch('/reset-password/')
   async resetPassword(
-    @Param('token') token: string,
-    @Body(ValidationPipe) changePasswordDto: ChangePasswordDto,
+    @Body(ValidationPipe) changePasswordDto: AuthResetDto,
   ): Promise<{ message: string }> {
-    await this.authService.resetPassword(token, changePasswordDto);
-
-    return {
-      message: 'Senha alterada com sucesso',
-    };
+    return await this.commandBus.execute(
+      new ResetUserCommand(changePasswordDto),
+    );
   }
 
-  @Post('/send-recover-email')
+  @Post('/send-recover-email/:email')
   async sendRecoverPasswordEmail(
-    @Body('email') email: string,
+    @Param('email') email: string,
   ): Promise<{ message: string }> {
     await this.authService.sendRecoverPasswordEmail(email);
     return {

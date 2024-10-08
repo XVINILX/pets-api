@@ -171,6 +171,40 @@ export class AnimalsService {
    * @param items number - Quantity of items in that page
    * @param page number - Quantity of pages
    */
+  async listAnimalSearchByCompanyId(
+    companyId: string,
+    search: string,
+    items?: number,
+    page?: number,
+  ) {
+    try {
+      const skip = (page - 1) * items;
+      const take = items;
+
+      const [animalList, total] = await this.animalRepository.findAndCount({
+        where: {
+          name: ILike(`%${search}%`),
+          company: { id: companyId },
+        },
+        relations: ['imagesList'],
+        skip: Number(skip),
+        take: Number(take),
+      });
+
+      return {
+        data: animalList,
+        total,
+      };
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
+  /**
+   * @param search string - Search by nome fantasia
+   * @param items number - Quantity of items in that page
+   * @param page number - Quantity of pages
+   */
   async authListAnimalSearch(
     search: string,
     userQuery: AuthJwtDto,
@@ -205,6 +239,7 @@ export class AnimalsService {
     try {
       const enterprise = await this.animalRepository.findOne({
         where: { slug },
+        relations: ['imagesList', 'company'],
       });
 
       return enterprise ? enterprise : null;

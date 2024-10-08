@@ -19,6 +19,8 @@ import { AnswerConfigEntity } from './entities/answerConfig.entity';
 import { AnswerEntity } from './entities/answer.entity';
 import { QuestionEntity } from './entities/question.entity';
 import { QuestionnairyConfigEntity } from './entities/questionnairyConfig.entity';
+import { MailerModule } from '@nestjs-modules/mailer';
+import { mailerConfig } from './configs/mailer.config';
 
 @Module({
   imports: [
@@ -28,6 +30,7 @@ import { QuestionnairyConfigEntity } from './entities/questionnairyConfig.entity
     EnterpriseModule,
     PageConfigModule,
     ConfigModule.forRoot({ isGlobal: true }),
+    MailerModule.forRoot(mailerConfig),
     TypeOrmModule.forRoot({
       type: 'postgres',
       host: process.env.PG_HOST,

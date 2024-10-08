@@ -31,6 +31,7 @@ import { GetAnimalBySlugCommand } from '../domain/query/find-by-slug-animals.que
 import { User } from 'src/core/decorators/user.decorators';
 import { AuthGetAnimalByIdQuery } from '../domain/query/auth-by-id-animals.query';
 import { AuthPaginationAnimalsQuery } from '../domain/query/auth-pagination-animals.query';
+import { PaginationAnimalsCompanyIdQuery } from '../domain/query/pagination-companyId-animals.query';
 
 @ControllerApp('animals', 'Animals')
 export class EnterpriseController {
@@ -106,6 +107,22 @@ export class EnterpriseController {
   ) {
     return this.queryBus.execute(
       new PaginationAnimalsQuery(search, page, items),
+    );
+  }
+
+  @Get('list-by-companyId')
+  @ApiResponse({
+    description: 'Searchs an Enterprise By Id',
+    type: ListAnimalsDto,
+  })
+  async ListWithPaginationAndCompanyId(
+    @Query('search') search: string,
+    @Query('page') page: number,
+    @Query('items') items: number,
+    @Query('companyId') companyId: string,
+  ) {
+    return this.queryBus.execute(
+      new PaginationAnimalsCompanyIdQuery(search, page, items, companyId),
     );
   }
 

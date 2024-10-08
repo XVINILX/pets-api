@@ -6,6 +6,7 @@ import {
   Patch,
   Post,
   UseGuards,
+  Query,
 } from '@nestjs/common';
 
 import { ControllerApp } from 'src/core/decorators/controller-apitag.decorators';
@@ -28,9 +29,8 @@ import { ReadEnterpriseDto } from '../domain/dtos/read-enterprise.dto';
 import { CreateEnterpriseDto } from '../domain/dtos/create-enterprise.dto';
 import { ListEnterpriseDto } from 'src/pageConfig/domain/dtos/list-page-config.dto';
 import { UpdateEnterpriseDto } from '../domain/dtos/update-enterprise.dto';
+import { GetEnterpriseBySlugQuery } from '../domain/query/find-by-slug-enterprise.query';
 
-@UseGuards(AuthGuard)
-@ApiBearerAuth('jwt')
 @ControllerApp('enterprise', 'Enterprise')
 export class EnterpriseController {
   constructor(
@@ -38,6 +38,8 @@ export class EnterpriseController {
     private readonly queryBus: QueryBus,
   ) {}
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('jwt')
   @Post()
   @ApiResponse({
     description: 'Creates an Enterprise',
@@ -61,6 +63,15 @@ export class EnterpriseController {
     return this.queryBus.execute(new GetEnterpriseByIdQuery(id));
   }
 
+  @Get('/')
+  @ApiResponse({
+    description: 'Searchs an Enterprise By slug',
+    type: ReadEnterpriseDto,
+  })
+  async findBySlug(@Query('slug') slug: string) {
+    return this.queryBus.execute(new GetEnterpriseBySlugQuery(slug));
+  }
+
   @Get('items=:items/page=:page/search=:search')
   @ApiResponse({
     description: 'Searchs an Enterprise By Id',
@@ -76,6 +87,8 @@ export class EnterpriseController {
     );
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('jwt')
   @Patch(':id/')
   @ApiResponse({
     description: 'Update an Enterprise',
@@ -90,6 +103,8 @@ export class EnterpriseController {
     );
   }
 
+  @UseGuards(AuthGuard)
+  @ApiBearerAuth('jwt')
   @ApiResponse({
     description: 'Delete an Enterprise',
     type: DeleteEnterpriseDto,

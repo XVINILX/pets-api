@@ -99,6 +99,24 @@ export class EnterpriseService {
     }
   }
 
+  async findEnterpriseBySlug(slug: string) {
+    try {
+      const enterprise = await this.enterpriseRepository.findOne({
+        where: { slug },
+        relations: [
+          'animals',
+          'pageConfig',
+          'pageConfig.backgroundImage',
+          'pageConfig.avatarImage',
+        ],
+      });
+
+      return enterprise ? enterprise : null;
+    } catch (error) {
+      throw new HttpException(error.message, HttpStatus.BAD_REQUEST);
+    }
+  }
+
   private async generateUniqueSlug(name: string): Promise<string> {
     const firstName = name.split(' ')[0].toLowerCase(); // Get the first name and lowercase it
     let slug = '';
